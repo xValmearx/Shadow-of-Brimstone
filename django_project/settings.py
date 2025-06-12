@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     
     # installed apps
     'accounts.apps.AccountsConfig',
-
+    'characters.apps.CharactersConfig',
     # 3rd party
 ]
 
