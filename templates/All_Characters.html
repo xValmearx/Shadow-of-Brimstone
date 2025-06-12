@@ -7,6 +7,8 @@
 
 {% block content %}
     {% for character in character_list %}
-        <p> {{character.character_name}}</p>
+        <p> this is {{character.character_name}}</p>
+        <p> {{character.weight}}</p>
+        <hr>
     {% endfor %}
 {% endblock content %}
