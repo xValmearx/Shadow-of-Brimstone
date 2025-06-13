@@ -131,6 +131,7 @@ class Character(models.Model):
         if self.character_class == "Preacher":
             return 2
         if self.character_class == "GunSlinger":
+          
             return 4
     def initiative(self):
         if self.character_class == "Marshal":
@@ -265,10 +266,5 @@ class Character(models.Model):
         return self.character_name
     
     def get_absolute_url(self):
-
-        if self.character_class == 'Marshal':
-            return reverse("marshall_detail",kwargs={'pk': self.pk})
-        
-        elif self.character_class == 'Ranger':
-            return reverse("ranger_detail",kwargs={'pk': self.pk})
+        return reverse("character_detail",kwargs={'pk': self.pk})
     
