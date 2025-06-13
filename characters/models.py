@@ -16,7 +16,7 @@ class Character(models.Model):
         ("Marshal", "Marshal"),
         ("Rancher", "Rancher"),
         ("LawMan","LawMan"),
-        ("PianoPlayer/SaloonGirl","PianoPlayer/SaloonGirl"),
+        ("PianoPlayer_SaloonGirl","PianoPlayer_SaloonGirl"),
         ("IndianScout","IndianScout"),
         ("Bandido","Bandido"),
         ("Preacher","Preacher"),
@@ -37,7 +37,7 @@ class Character(models.Model):
             return 2
         if self.character_class == "LawMan":
             return 2
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 4
         if self.character_class == "IndianScout":
             return 3
@@ -54,7 +54,7 @@ class Character(models.Model):
             return 2
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 3
         if self.character_class == "IndianScout":
             return 2
@@ -71,7 +71,7 @@ class Character(models.Model):
             return 3
         if self.character_class == "LawMan":
             return 1
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 3
         if self.character_class == "IndianScout":
             return 3
@@ -88,7 +88,7 @@ class Character(models.Model):
             return 3
         if self.character_class == "LawMan":
             return 3
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 1
         if self.character_class == "IndianScout":
             return 2
@@ -105,7 +105,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "LawMan":
             return 2
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 2
         if self.character_class == "IndianScout":
             return 3
@@ -122,7 +122,7 @@ class Character(models.Model):
             return 1
         if self.character_class == "LawMan":
             return 3
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 3
         if self.character_class == "IndianScout":
             return 2
@@ -140,7 +140,7 @@ class Character(models.Model):
             return 3
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 5
         if self.character_class == "IndianScout":
             return 5
@@ -157,7 +157,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 4
         if self.character_class == "IndianScout":
             return 4
@@ -174,7 +174,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 4
         if self.character_class == "IndianScout":
             return 4
@@ -197,7 +197,7 @@ class Character(models.Model):
             return 14
         if self.character_class == "LawMan":
             return 12
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 8
         if self.character_class == "IndianScout":
             return 10
@@ -214,7 +214,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 3
         if self.character_class == "IndianScout":
             return 4
@@ -231,7 +231,7 @@ class Character(models.Model):
             return 10
         if self.character_class == "LawMan":
             return 12
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 14
         if self.character_class == "IndianScout":
             return 10
@@ -248,7 +248,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "LawMan":
             return 4
-        if self.character_class == "PianoPlayer/SaloonGirl":
+        if self.character_class == "PianoPlayer_SaloonGirl":
             return 4
         if self.character_class == "IndianScout":
             return 4
