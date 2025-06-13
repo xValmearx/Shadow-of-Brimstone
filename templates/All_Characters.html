@@ -6,12 +6,6 @@
 
 
 {% block content %}
-
-    <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %} #csrf_token is very important to have as this is POST request
-        <button type="submit">Logout</button>
-    </form>
-    
     {% for character in character_list %}
         <p> this is {{character.character_name}}</p>
          <a href = "{% url "character_detail" character.pk%}">Details</a>

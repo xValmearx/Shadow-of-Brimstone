@@ -19,8 +19,8 @@ class Character_View(DetailView):
 
     
     def get_success_url(self):
-        twit = self.get_object()
-        return reverse("character_detail", kwargs={"pk": twit.pk})
+        obj = self.get_object()
+        return reverse("character_detail", kwargs={"pk": obj.pk})
     
 
 

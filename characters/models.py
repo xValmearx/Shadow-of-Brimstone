@@ -21,7 +21,6 @@ class Character(models.Model):
         ("Bandido","Bandido"),
         ("Preacher","Preacher"),
         ("GunSlinger","GunSlinger"),
-
     )
 
     character_class = models.CharField(choices=class_options, default="Marshal")

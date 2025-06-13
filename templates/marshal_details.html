@@ -1,8 +1,27 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-    <p>{{ character.character_name}}</p>
-    <p>{{character.strength}}</p>
-    <a href = "{% url "home" %}">All Characters</a>
+
+    <div class="card">
+    <div class="card-content">
+      <h2 class="card-title">{{ character.character_name}}</h2>
+      <h4>{{character.character_class}}</h4>
+
+      
+      <h3>Stats</h3>
+      <h5> Agility : {{character.agility}}</h5>
+      <h5> Cunning : {{character.cunning}}</h5>
+      <h5> Spirit : {{character.spirit}}</h5>
+      <h5> Strength : {{character.strength}}</h5>
+      <h5> Lore : {{character.lore}}</h5>
+      <h5> Luck : {{character.luck}}</h5>
+
+      <h3>Combat</h3>
+      <h5> Range : {{character.range_to_hit}}+</h5>
+      <h5> Melee : {{character.melee_to_hit}}+</h5>
+      <h5> Combat : {{character.combat}}</h5>
+      <p class="card-description">This is a simple description for the card. You can use this space to provide more details.</p>
+    </div>
+  </div>
+
 {% endblock content %}
