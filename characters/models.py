@@ -260,6 +260,10 @@ class Character(models.Model):
     def weight(self):
         return 5 + self.strength()
     
+
+    current_health = models.IntegerField(default=0)
+    current_sanity = models.IntegerField(default=0)
+
     max_grit = models.IntegerField(default=2)
     def __str__(self):
         return self.character_name
@@ -267,3 +271,17 @@ class Character(models.Model):
     def get_absolute_url(self):
         return reverse("character_detail",kwargs={'pk': self.pk})
     
+class Passive_Buff(models.Model):
+
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='passive_buffs')
+    
+
+    name = models.CharField(blank= False,default= "buff name here")
+
+    text = models.TextField(blank= False, default= "text here")
+
+    def __str__(self):
+        return self.name

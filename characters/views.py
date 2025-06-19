@@ -1,6 +1,8 @@
-from django.shortcuts import redirect, render
 from django.views.generic import ListView,DetailView
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
+from django.http import JsonResponse
+
+import json
 
 from .models import Character
 
@@ -12,11 +14,29 @@ class Character_View(DetailView):
     model = Character
 
     def get_template_names(self):
-         
-         obj = self.get_object()
-         
-         return [f'{obj.character_class}_details.html']
+         character = self.get_object()
+         return f'{character.character_class}_details.html'
+    
+    def post(self, request, *args, **kwargs):
+        character = self.get_object()
+        context = {}
 
+        try:
+            # Parse JSON data from the request body
+            data = json.loads(request.body)
+            key1 = data.get('key1')
+
+            if key1 == 'value1':
+                context["data"] = "got better data"
+                character.current_health += 1
+                character.save()
+                return JsonResponse(context)
+
+            context["data"] = "got data"
+            return JsonResponse(context)
+        except:
+            context["error"] = "there seems to be an error"
+            return JsonResponse(context)
     
     def get_success_url(self):
         obj = self.get_object()

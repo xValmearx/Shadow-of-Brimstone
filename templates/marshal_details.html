@@ -1,27 +1,137 @@
 {% extends "base.html" %}
+
 {% block content %}
 
+<div class = 'container'>
 
-    <div class="card">
-    <div class="card-content">
-      <h2 class="card-title">{{ character.character_name}}</h2>
-      <h4>{{character.character_class}}</h4>
+  <meta name="csrf-token" content="{{ csrf_token }}">
 
-      
-      <h3>Stats</h3>
-      <h5> Agility : {{character.agility}}</h5>
-      <h5> Cunning : {{character.cunning}}</h5>
-      <h5> Spirit : {{character.spirit}}</h5>
-      <h5> Strength : {{character.strength}}</h5>
-      <h5> Lore : {{character.lore}}</h5>
-      <h5> Luck : {{character.luck}}</h5>
+  <div class="character_title">
+    <h1>{{character.character_class}}</h1>
+    <img src="/static/img/Us_Marshal.png">
+    <h2>{{character.character_name}}</h2>
 
-      <h3>Combat</h3>
-      <h5> Range : {{character.range_to_hit}}+</h5>
-      <h5> Melee : {{character.melee_to_hit}}+</h5>
-      <h5> Combat : {{character.combat}}</h5>
-      <p class="card-description">This is a simple description for the card. You can use this space to provide more details.</p>
-    </div>
+    <!-- data-url='{% url "character_detail" character.pk%}' -->
+    <table>
+      <tr>
+        <td style="padding: 10px;">
+          <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
+
+          <form method="post" id = "health" data-id = {{character.pk}}>
+            {% csrf_token %}
+            <button type="submit"  name = "health_add" >+</button>
+          </form>
+
+        </td>
+        <td>
+          <h4>Sanity: {{character.current_sanity}} / {{character.sanity}}</h4>
+        </td>
+      </tr>
+    </table>
   </div>
 
+  <div class = 'stat_info'>
+    <table>
+      <h1>Stats</h1>
+      <tr> 
+        <td>
+          <h2>Agility</h2>
+          <p>{{character.agility}}</p>
+        </td>
+        <td>
+          <h2>Cunning</h2>
+          <p>{{character.cunning}}</p>
+        </td>
+        <td>
+          <h2>Spitit</h2>
+          <p>{{character.spirit}}</p>
+        </td>
+      </tr>
+
+      <tr style="text-align: center;"> 
+        <td>
+          <h2>Strength</h2>
+          <p>{{character.strength}}</p>
+        </td>
+        <td>
+          <h2>Lore</h2>
+          <p>{{character.lore}}</p>
+        </td>
+        <td>
+          <h2>Luck</h2>
+          <p>{{character.luck}}</p>
+        </td>
+      </tr>
+  </div>
+
+  <div class = 'stat_info'>
+  <table>
+    <h1> Combat</h1>
+    <tr> 
+        <td>
+          <h2>Range</h2>
+          <p>{{character.range_to_hit}}+</p>
+        </td>
+        <td>
+          <h2>Melee</h2>
+          <p>{{character.melee_to_hit}}+</p>
+        </td>
+        <td>
+          <h2>Comabt</h2>
+          <p>{{character.combat}}</p>
+        </td>
+      </tr>
+
+  </table>
+  </div>
+
+  <div class = 'abilites'>
+
+    <h1> Class Ability</h1>
+    <p>
+      Double-Shot: Once per turn, when you kill an Enemy with a ShotGun, you gain +1 shot with that ShotGun
+    </p>
+
+    <h1> Passive Buffs </h1>
+    {% for buff in character.passive_buffs.all %}
+
+      <div style="border: solid black; padding: 4px">
+        <h4> {{buff.name}} </h4>
+        <p> {{buff.text}}</p>
+      </div>
+      
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  document.getElementById('health').addEventListener('submit',function(event){
+    event.preventDefault();
+
+    //get the primary key
+    const pk = document.getElementById('health').getAttribute('data-id')
+
+    //sending post request to character 
+    fetch(`/characters/${pk}`,{
+      headers: {
+        'Content-Type':'application/json',
+        'X-CSRFToken': csrfToken,},
+      method : 'POST',
+      body : JSON.stringify({
+        key1: 'value1',
+      })// body
+
+    })//fetch function
+    .then(response => response.json())
+    .then(data => {
+      document.getElementById("current_wounds").innerHTML = `working`
+    })
+    .catch(error => console.log('Error:', error));
+  })//health form function
+
+</script>
+
 {% endblock content %}
+
