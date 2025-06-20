@@ -4,7 +4,7 @@
 
 <div class = 'container'>
 
-  <meta name="csrf-token" content="{{ csrf_token }}">
+  <meta name="csrf-token" content="{{ csrf_token }}" data-id = {{character.pk}}>
 
   <div class="character_title">
     <h1>{{character.character_class}}</h1>
@@ -14,14 +14,18 @@
     <!-- data-url='{% url "character_detail" character.pk%}' -->
     <table>
       <tr>
+        <td><h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4></td>
         <td style="padding: 10px;">
-          <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
-
-          <form method="post" id = "health" data-id = {{character.pk}}>
+          <form method="post" id = "health+" data-id = {{character.pk}}>
             {% csrf_token %}
-            <button type="submit"  name = "health_add" >+</button>
+            <button type="submit">+</button>
           </form>
-
+        </td>
+        <td>
+          <form method="post" id = "health-" data-id = {{character.pk}}>
+            {% csrf_token %}
+            <button type="submit">-</button>
+          </form>
         </td>
         <td>
           <h4>Sanity: {{character.current_sanity}} / {{character.sanity}}</h4>
@@ -107,11 +111,9 @@
 <script>
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  document.getElementById('health').addEventListener('submit',function(event){
-    event.preventDefault();
-
+  async function Health_Data(Data) {
     //get the primary key
-    const pk = document.getElementById('health').getAttribute('data-id')
+    const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
 
     //sending post request to character 
     fetch(`/characters/${pk}`,{
@@ -120,18 +122,26 @@
         'X-CSRFToken': csrfToken,},
       method : 'POST',
       body : JSON.stringify({
-        key1: 'value1',
+        key1: Data,
       })// body
 
     })//fetch function
     .then(response => response.json())
-    .then(data => {
-      document.getElementById("current_wounds").innerHTML = `working`
-    })
+    .then(data => document.getElementById("current_wounds").innerHTML = `${data["data"]} / {{character.health}}`)
     .catch(error => console.log('Error:', error));
+  }
+
+  document.getElementById('health+').addEventListener('submit',async function(event){
+    event.preventDefault();
+     Health_Data('health+');
   })//health form function
 
-</script>
+  document.getElementById('health-').addEventListener('submit',async function(event){
+    event.preventDefault();
+     Health_Data('health-');
+  })//health form function
 
+
+</script>
 {% endblock content %}
 
