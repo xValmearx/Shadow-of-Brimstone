@@ -46,6 +46,7 @@ class Character(models.Model):
             return 1
         if self.character_class == "GunSlinger":
             return 3
+    @property
     def cunning(self):
         if self.character_class == "Marshal":
             return 4
@@ -63,6 +64,7 @@ class Character(models.Model):
             return 2
         if self.character_class == "GunSlinger":
             return 3
+    @property
     def spirit(self):
         if self.character_class == "Marshal":
             return 2
@@ -80,6 +82,7 @@ class Character(models.Model):
             return 4
         if self.character_class == "GunSlinger":
             return 2
+    @property 
     def strength(self):
         if self.character_class == "Marshal":
             return 2
@@ -97,6 +100,7 @@ class Character(models.Model):
             return 3
         if self.character_class == "GunSlinger":
             return 2
+    @property
     def lore(self):
         if self.character_class == "Marshal":
             return 1
@@ -114,6 +118,7 @@ class Character(models.Model):
             return 3
         if self.character_class == "GunSlinger":
             return 2
+    @property
     def luck(self):
         if self.character_class == "Marshal":
             return 3
@@ -132,6 +137,7 @@ class Character(models.Model):
         if self.character_class == "GunSlinger":
           
             return 4
+    @property
     def initiative(self):
         if self.character_class == "Marshal":
             return 4
@@ -149,6 +155,7 @@ class Character(models.Model):
             return 2
         if self.character_class == "GunSlinger":
             return 6
+    @property 
     def range_to_hit(self):
         if self.character_class == "Marshal":
             return 4
@@ -166,6 +173,7 @@ class Character(models.Model):
             return 5
         if self.character_class == "GunSlinger":
             return 3
+    @property
     def melee_to_hit(self):
         if self.character_class == "Marshal":
             return 4
@@ -184,11 +192,13 @@ class Character(models.Model):
         if self.character_class == "GunSlinger":
             return 5
         
+    @property
     def combat(self):
         if self.character_class == "GunSlinger":
             return 1
         else:
             return 2
+    @property
     def health(self):
         if self.character_class == "Marshal":
             return 10
@@ -206,6 +216,7 @@ class Character(models.Model):
             return 12
         if self.character_class == "GunSlinger":
             return 10
+    @property
     def defence(self):
         if self.character_class == "Marshal":
             return 3
@@ -223,6 +234,7 @@ class Character(models.Model):
             return 5
         if self.character_class == "GunSlinger":
             return 5
+    @property
     def sanity(self):
         if self.character_class == "Marshal":
             return 10
@@ -240,6 +252,7 @@ class Character(models.Model):
             return 10
         if self.character_class == "GunSlinger":
             return 12
+    @property
     def willpower(self):
         if self.character_class == "Marshal":
             return 4
@@ -257,12 +270,15 @@ class Character(models.Model):
             return 3
         if self.character_class == "GunSlinger":
             return 4
+    
+    @property
     def weight(self):
         return 5 + self.strength()
     
 
-    current_health = models.IntegerField(default=0)
-    current_sanity = models.IntegerField(default=0)
+    current_health = models.IntegerField(default = 0)
+
+    current_sanity = models.IntegerField(default= 0 )
 
     max_grit = models.IntegerField(default=2)
     def __str__(self):

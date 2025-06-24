@@ -11,27 +11,48 @@
     <img src="/static/img/Us_Marshal.png">
     <h2>{{character.character_name}}</h2>
 
-    <!-- data-url='{% url "character_detail" character.pk%}' -->
-    <table>
-      <tr>
-        <td><h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4></td>
-        <td style="padding: 10px;">
-          <form method="post" id = "health+" data-id = {{character.pk}}>
+    <div style="float: left;">
+      <h3>Health</h3>
+      <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
+      <table>
+        <tr>
+          <td>
+            <form method="post" id = "health+">
             {% csrf_token %}
             <button type="submit">+</button>
           </form>
-        </td>
-        <td>
-          <form method="post" id = "health-" data-id = {{character.pk}}>
+          </td>
+          <td>
+            <form method="post" id = "health-">
             {% csrf_token %}
             <button type="submit">-</button>
           </form>
-        </td>
-        <td>
-          <h4>Sanity: {{character.current_sanity}} / {{character.sanity}}</h4>
-        </td>
-      </tr>
-    </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="float: right;">
+      <h3>Sanity</h3>
+      <h4 id = "current_sanity">{{character.current_sanity}} / {{character.sanity}}</h4>
+      <table>
+        <tr>
+          <td>
+            <form method="post" id = "sanity+">
+            {% csrf_token %}
+            <button type="submit">+</button>
+          </form>
+          </td>
+          <td>
+            <form method="post" id = "sanity-" >
+            {% csrf_token %}
+            <button type="submit">-</button>
+          </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+
   </div>
 
   <div class = 'stat_info'>
@@ -109,26 +130,55 @@
 </div>
 
 <script>
+  // get csrf token for safty
   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-  async function Health_Data(Data) {
-    //get the primary key
-    const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
+  // get the primary key of the model
+  const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
+
+  // for sending post request to the model
+  // data will be a dictionary of information, use the key for function to assign the logic
+  async function Send_Data(Data) {
 
     //sending post request to character 
-    fetch(`/characters/${pk}`,{
+    let send_data = await fetch(`/characters/${pk}`,{
       headers: {
         'Content-Type':'application/json',
         'X-CSRFToken': csrfToken,},
       method : 'POST',
-      body : JSON.stringify({
-        key1: Data,
-      })// body
-
+      body : JSON.stringify(Data
+      )// body
     })//fetch function
-    .then(response => response.json())
-    .then(data => document.getElementById("current_wounds").innerHTML = `${data["data"]} / {{character.health}}`)
-    .catch(error => console.log('Error:', error));
+
+    let send_json = await send_data.json()
+    return send_json
+  }
+
+
+  async function Health_Data(Data) {
+    
+    let info = {}
+
+    info["function"] = Data;
+    
+    data_dict = await Send_Data(info);
+
+    health = data_dict["health"]
+
+    document.getElementById("current_wounds").innerHTML = `${health} / {{character.health}}`
+  }
+
+  async function Sanity_Data(Data){
+    //get the primary key
+    let info = {}
+
+    info["function"] = Data;
+    
+    data_dict = await Send_Data(info);
+
+    sanity = data_dict["sanity"]
+
+    document.getElementById("current_sanity").innerHTML = `${sanity} / {{character.sanity}}`
   }
 
   document.getElementById('health+').addEventListener('submit',async function(event){
@@ -141,6 +191,15 @@
      Health_Data('health-');
   })//health form function
 
+  document.getElementById('sanity+').addEventListener('submit',async function(event){
+    event.preventDefault();
+     Sanity_Data('sanity+');
+  })//health form function
+
+   document.getElementById('sanity-').addEventListener('submit',async function(event){
+    event.preventDefault();
+     Sanity_Data('sanity-');
+  })//health form function
 
 </script>
 {% endblock content %}
