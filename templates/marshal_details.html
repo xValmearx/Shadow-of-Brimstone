@@ -92,6 +92,7 @@
   <div class = 'stat_info'>
   <table>
     <h1> Combat</h1>
+    <h2> Initiative: {{character.initiative}}</h2>
     <tr> 
         <td>
           <h2>Range</h2>
@@ -111,23 +112,65 @@
   </div>
 
   <div class = 'abilites'>
-
     <h1> Class Ability</h1>
     <p>
       Double-Shot: Once per turn, when you kill an Enemy with a ShotGun, you gain +1 shot with that ShotGun
     </p>
+    
+    <div class = "card" id = "character_card">
+      <h1>Rolling Thunder</h1>
+      <p
+      style="
+      position: relative;
+      padding: 30px;
+      float: left;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      " >
+        Any time you kill and Enemy, you may recover a <b>Grit</b> on the D6 roll of 4+
+      </p>
+    </div>
+
+    <br>
+
+    <div>
+      <table>
+      <tr>
+        <td>
+          <div>
+            <form action="post" id = "card_previous">
+              <button style="font-size: 30px;">&#8592;</button>
+            </form>
+          </div>
+        </td>
+        <td>
+          <div>
+            <form action="post" id="card_next">
+              <button style="font-size: 30px;"> &#8594; </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+    </table>
+    </div>
 
     <h1> Passive Buffs </h1>
     {% for buff in character.passive_buffs.all %}
 
-      <div style="border: solid black; padding: 4px">
+      <div style="border: solid black; padding: 5px;">
         <h4> {{buff.name}} </h4>
         <p> {{buff.text}}</p>
       </div>
+
+      <br>
       
     {% endfor %}
   </div>
 </div>
+
+  
 
 <script>
   // get csrf token for safty
@@ -135,6 +178,8 @@
 
   // get the primary key of the model
   const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
+
+// functions--------------------------------------------------------------------------------------------------
 
   // for sending post request to the model
   // data will be a dictionary of information, use the key for function to assign the logic
@@ -153,7 +198,6 @@
     let send_json = await send_data.json()
     return send_json
   }
-
 
   async function Health_Data(Data) {
     
@@ -181,6 +225,71 @@
     document.getElementById("current_sanity").innerHTML = `${sanity} / {{character.sanity}}`
   }
 
+  async function Card_Data(Data){
+    //get the primary key
+    let info = {}
+    info["function"] = Data;
+    data_dict = await Send_Data(info);
+    card = data_dict["card"]
+
+    let character_card = document.getElementById('character_card')
+
+    if(card == 1){
+      character_card.innerHTML = `
+      <h1>Rolling Thunder</h1>
+      <p
+      style="
+      position: relative;
+      padding: 30px;
+      float: left;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      " >
+        Any time you kill and Enemy, you may recover a <b>Grit</b> on the D6 roll of 4+
+      </p>
+      `
+    }
+    if(card == 2){
+      character_card.innerHTML = `
+      <h1>Harden Resolve</h1>
+      <p
+      style="
+      position: relative;
+      padding: 30px;
+      float: left;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 22px;
+      " >
+        Use <b>1 Grit</b> to Heal up to 4 Wounds/Sanity (any mix) total from yourself and other Heros on your Map Tile <br> <br>
+        You may Recover one extra <b>Grit</b> when using a <b>Tonic</b> side bag token</p>
+      `
+    }
+    if(card == 3){
+      character_card.innerHTML = `
+      <h1>Cleaning Up The West</h1>
+      <p
+      style="
+      position: relative;
+      padding: 30px;
+      float: left;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      " >
+        Any time you kill an Enemy you may Heal <b>1 Wound</b> <u> and</u> <b>1 Sanity</b> and gain <b>10 XP</b>
+      </p>
+      <br>
+      <h2>+1 Max Grit</h2>
+      `
+    }
+  }
+
+// health and sanity buttons------------------------------------------------------------------------------------------
   document.getElementById('health+').addEventListener('submit',async function(event){
     event.preventDefault();
      Health_Data('health+');
@@ -201,6 +310,17 @@
      Sanity_Data('sanity-');
   })//health form function
 
+
+// character card buttons---------------------------------------------------------------------------------------------
+  document.getElementById('card_next').addEventListener('submit', async function(event){
+    event.preventDefault();
+    Card_Data('card_next')
+  })
+
+  document.getElementById('card_previous').addEventListener('submit', async function(event){
+    event.preventDefault();
+    Card_Data('card_previous')
+  })
 </script>
 {% endblock content %}
 

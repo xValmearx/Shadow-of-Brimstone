@@ -56,6 +56,24 @@ class Character_View(DetailView):
                 context["sanity"] = character.current_sanity
                 return JsonResponse(context)
             
+            elif function == "card_next":
+                character.class_card += 1
+
+                if character.class_card > 3:
+                    character.class_card = 1
+                character.save()
+                context["card"] = character.class_card
+                return JsonResponse(context)
+            
+            elif function == "card_previous":
+                character.class_card -= 1
+
+                if character.class_card < 1:
+                    character.class_card = 3
+                character.save()
+                context["card"] = character.class_card
+                return JsonResponse(context)
+            
             context["data"] = "got data"
             return JsonResponse(context)
         

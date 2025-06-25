@@ -281,6 +281,10 @@ class Character(models.Model):
     current_sanity = models.IntegerField(default= 0 )
 
     max_grit = models.IntegerField(default=2)
+
+    class_card = models.IntegerField(default=1)
+
+
     def __str__(self):
         return self.character_name
     
