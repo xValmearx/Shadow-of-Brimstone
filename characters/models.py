@@ -277,10 +277,13 @@ class Character(models.Model):
     
 
     current_health = models.IntegerField(default = 0)
-
     current_sanity = models.IntegerField(default= 0 )
 
     max_grit = models.IntegerField(default=2)
+    current_grit = models.IntegerField(default=2)
+
+    corruption = models.IntegerField(default=5)
+    current_corruption = models.IntegerField(default=0)
 
     class_card = models.IntegerField(default=1)
 
@@ -298,7 +301,6 @@ class Passive_Buff(models.Model):
         on_delete=models.CASCADE,
           related_name='passive_buffs')
     
-
     name = models.CharField(blank= False,default= "buff name here")
 
     text = models.TextField(blank= False, default= "text here")

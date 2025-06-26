@@ -4,55 +4,104 @@
 
 <div class = 'container'>
 
-  <meta name="csrf-token" content="{{ csrf_token }}" data-id = {{character.pk}}>
+  <meta name="csrf-token" content="{{ csrf_token }}" data-id = {{character.pk}} card_data = {{character.class_card}}>
 
   <div class="character_title">
     <h1>{{character.character_class}}</h1>
     <img src="/static/img/Us_Marshal.png">
     <h2>{{character.character_name}}</h2>
 
-    <div style="float: left;">
-      <h3>Health</h3>
-      <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
-      <table>
-        <tr>
-          <td>
-            <form method="post" id = "health+">
-            {% csrf_token %}
-            <button type="submit">+</button>
-          </form>
-          </td>
-          <td>
-            <form method="post" id = "health-">
-            {% csrf_token %}
-            <button type="submit">-</button>
-          </form>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <div
+    style="
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    ">
+      <div>
+        <h3>Health</h3>
+        <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
+        <table>
+          <tr>
+            <td>
+              <form method="post" id = "health+">
+              {% csrf_token %}
+              <button type="submit">+</button>
+            </form>
+            </td>
+            <td>
+              <form method="post" id = "health-">
+              {% csrf_token %}
+              <button type="submit">-</button>
+            </form>
+            </td>
+          </tr>
+        </table>
+      </div> 
 
-    <div style="float: right;">
-      <h3>Sanity</h3>
-      <h4 id = "current_sanity">{{character.current_sanity}} / {{character.sanity}}</h4>
-      <table>
-        <tr>
-          <td>
-            <form method="post" id = "sanity+">
-            {% csrf_token %}
-            <button type="submit">+</button>
-          </form>
-          </td>
-          <td>
-            <form method="post" id = "sanity-" >
-            {% csrf_token %}
-            <button type="submit">-</button>
-          </form>
-          </td>
-        </tr>
-      </table>
-    </div>
+      <div>
+        <h3>Sanity</h3>
+        <h4 id = "current_sanity">{{character.current_sanity}} / {{character.sanity}}</h4>
+        <table>
+          <tr>
+            <td>
+              <form method="post" id = "sanity+">
+              {% csrf_token %}
+              <button type="submit">+</button>
+            </form>
+            </td>
+            <td>
+              <form method="post" id = "sanity-" >
+              {% csrf_token %}
+              <button type="submit">-</button>
+            </form>
+            </td>
+          </tr>
+        </table>
+      </div>
 
+      <div>
+        <h3>Corrupt</h3>
+        <h4 id = "current_corruption">{{character.current_corruption}} / {{character.corruption}}</h4>
+        <table>
+          <tr>
+            <td>
+              <form method="post" id = "corupt+">
+              {% csrf_token %}
+              <button type="submit">+</button>
+            </form>
+            </td>
+            <td>
+              <form method="post" id = "corupt-" >
+              {% csrf_token %}
+              <button type="submit">-</button>
+            </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <div>
+        <h3>Grit</h3>
+        <h4 id = "current_grit">{{character.current_grit}} / {{character.max_grit}}</h4>
+        <table>
+          <tr>
+            <td>
+              <form method="post" id = "grit+">
+              {% csrf_token %}
+              <button type="submit">+</button>
+            </form>
+            </td>
+            <td>
+              <form method="post" id = "grit-" >
+              {% csrf_token %}
+              <button type="submit">-</button>
+            </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+    </div>
   </div>
 
   <div class = 'stat_info'>
@@ -61,30 +110,30 @@
       <tr> 
         <td>
           <h2>Agility</h2>
-          <p>{{character.agility}}</p>
+          <p id = "agility">{{character.agility}}</p>
         </td>
         <td>
           <h2>Cunning</h2>
-          <p>{{character.cunning}}</p>
+          <p id = "cunning">{{character.cunning}}</p>
         </td>
         <td>
           <h2>Spitit</h2>
-          <p>{{character.spirit}}</p>
+          <p id = "spirit">{{character.spirit}}</p>
         </td>
       </tr>
 
       <tr style="text-align: center;"> 
         <td>
           <h2>Strength</h2>
-          <p>{{character.strength}}</p>
+          <p id = "strength">{{character.strength}}</p>
         </td>
         <td>
           <h2>Lore</h2>
-          <p>{{character.lore}}</p>
+          <p id = "lore">{{character.lore}}</p>
         </td>
         <td>
           <h2>Luck</h2>
-          <p>{{character.luck}}</p>
+          <p id = luck>{{character.luck}}</p>
         </td>
       </tr>
   </div>
@@ -92,24 +141,25 @@
   <div class = 'stat_info'>
   <table>
     <h1> Combat</h1>
-    <h2> Initiative: {{character.initiative}}</h2>
+    <h2 id = "initiative"> Initiative: {{character.initiative}}</h2>
     <tr> 
         <td>
           <h2>Range</h2>
-          <p>{{character.range_to_hit}}+</p>
+          <p id = "range">{{character.range_to_hit}}+</p>
         </td>
         <td>
           <h2>Melee</h2>
-          <p>{{character.melee_to_hit}}+</p>
+          <p id = "melee">{{character.melee_to_hit}}+</p>
         </td>
         <td>
           <h2>Comabt</h2>
-          <p>{{character.combat}}</p>
+          <p id = "combat">{{character.combat}}</p>
         </td>
       </tr>
 
   </table>
   </div>
+
 
   <div class = 'abilites'>
     <h1> Class Ability</h1>
@@ -118,25 +168,59 @@
     </p>
     
     <div class = "card" id = "character_card">
-      <h1>Rolling Thunder</h1>
-      <p
-      style="
-      position: relative;
-      padding: 30px;
-      float: left;
-      top: 20%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      " >
-        Any time you kill and Enemy, you may recover a <b>Grit</b> on the D6 roll of 4+
-      </p>
+
+      {% if character.class_card == 1 %}
+        <h1>Rolling Thunder</h1>
+        <p
+        style="
+        position: relative;
+        padding: 30px;
+        float: left;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        " >
+          Any time you kill and Enemy, you may recover a <b>Grit</b> on the D6 roll of 4+
+        </p>
+      {% elif character.class_card == 2%}
+        <h1>Harden Resolve</h1>
+        <p
+        style="
+        position: relative;
+        padding: 30px;
+        float: left;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 22px;
+        " >
+          Use <b>1 Grit</b> to Heal up to 4 Wounds/Sanity (any mix) total from yourself and other Heros on your Map Tile <br> <br>
+          You may Recover one extra <b>Grit</b> when using a <b>Tonic</b> side bag token</p>
+      {% else %}
+        <h1>Cleaning Up The West</h1>
+        <p
+        style="
+        position: relative;
+        padding: 30px;
+        float: left;
+        top: 20%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        " >
+          Any time you kill an Enemy you may Heal <b>1 Wound</b> <u> and</u> <b>1 Sanity</b> and gain <b>10 XP</b>
+        </p>
+        <br>
+        <h2>+1 Max Grit</h2>
+      {% endif %}
     </div>
 
     <br>
 
+     <!-- card buttons -->
     <div>
-      <table>
+      <table> 
       <tr>
         <td>
           <div>
@@ -159,8 +243,14 @@
     <h1> Passive Buffs </h1>
     {% for buff in character.passive_buffs.all %}
 
-      <div style="border: solid black; padding: 5px;">
-        <h4> {{buff.name}} </h4>
+      <div style="
+      border: solid black; 
+      padding: 5px; 
+      width: 80%;
+      border-radius: 8px;
+      font-size: 18px;" 
+      data-id={{buff.id}}>
+        <h3> {{buff.name}} </h3>
         <p> {{buff.text}}</p>
       </div>
 
@@ -170,6 +260,33 @@
   </div>
 </div>
 
+
+<div class = 'container'>
+  <div class = 'equipment'>
+    hello world
+  </div>
+
+  <div class = 'resources'>
+    
+    <div>
+        <h1>TOKEN BAG</h1>
+    </div>
+
+    <div>
+        <h1>GOLD / DARKSTONE</h1>
+    </div>
+
+    <div>
+        <h1>XP</h1>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
   
 
 <script>
@@ -178,6 +295,19 @@
 
   // get the primary key of the model
   const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
+
+  let class_card = document.querySelector('meta[name="csrf-token"]').getAttribute('card_data');
+
+  
+  if(class_card == 3){
+    var card_3_equiped = true
+  }
+  else{
+    var card_3_equiped = false
+  }
+
+
+  
 
 // functions--------------------------------------------------------------------------------------------------
 
@@ -225,6 +355,34 @@
     document.getElementById("current_sanity").innerHTML = `${sanity} / {{character.sanity}}`
   }
 
+  async function Grit_Data(Data){
+     //get the primary key
+    let info = {}
+
+    info["function"] = Data;
+    
+    data_dict = await Send_Data(info);
+
+    grit = data_dict["grit"]
+
+    max_grit = data_dict["max_grit"]
+
+    document.getElementById("current_grit").innerHTML = `${grit} / ${max_grit}`
+  }
+
+  async function Corrupt_Data(Data){
+    //get the primary key
+    let info = {}
+
+    info["function"] = Data;
+    
+    data_dict = await Send_Data(info);
+
+    corruption = data_dict["corruption"]
+
+    document.getElementById("current_corruption").innerHTML = `${corruption} / {{character.corruption}}`
+  }
+
   async function Card_Data(Data){
     //get the primary key
     let info = {}
@@ -250,6 +408,14 @@
         Any time you kill and Enemy, you may recover a <b>Grit</b> on the D6 roll of 4+
       </p>
       `
+
+      if(card_3_equiped == true){
+        card_3_equiped = false
+
+        data = {}
+        data['max_grit'] = -1
+        Update_Character_Date(data)
+      }
     }
     if(card == 2){
       character_card.innerHTML = `
@@ -267,6 +433,14 @@
         Use <b>1 Grit</b> to Heal up to 4 Wounds/Sanity (any mix) total from yourself and other Heros on your Map Tile <br> <br>
         You may Recover one extra <b>Grit</b> when using a <b>Tonic</b> side bag token</p>
       `
+
+      if(card_3_equiped == true){
+        card_3_equiped = false
+
+        data = {}
+        data['max_grit'] = -1
+        Update_Character_Date(data)
+      }
     }
     if(card == 3){
       character_card.innerHTML = `
@@ -286,10 +460,52 @@
       <br>
       <h2>+1 Max Grit</h2>
       `
+      if(card_3_equiped == false){
+        card_3_equiped = true
+
+        data = {}
+        data['max_grit'] = 1
+        Update_Character_Date(data)
+      }
+
+
     }
   }
 
-// health and sanity buttons------------------------------------------------------------------------------------------
+  async function Update_Character_Date(Data){
+
+    // assign character stats
+    health = document.getElementById("current_wounds")
+    grit = document.getElementById("current_grit")
+    // temp dictionary
+    var a = {}
+    a["function"] = "update"
+
+    // merge two dictionaries together
+    var info = Object.assign({},a,Data)
+
+    console.log("sending information")
+    console.log(info)
+
+    // get new dictionary of information to update character stats
+    data_dict = await Send_Data(info);
+
+    console.log("reciving information")
+    console.log(data_dict)
+
+
+    if("health" in data_dict){
+      health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
+    }
+
+    if('max_grit' in data_dict){
+      grit.innerHTML = ` ${data_dict["current_grit"]} / ${data_dict["max_grit"]}`
+    }
+
+  }
+
+
+// health,sanity,grit buttons------------------------------------------------------------------------------------------
   document.getElementById('health+').addEventListener('submit',async function(event){
     event.preventDefault();
      Health_Data('health+');
@@ -310,6 +526,25 @@
      Sanity_Data('sanity-');
   })//health form function
 
+  document.getElementById('grit+').addEventListener('submit', async function(event){
+    event.preventDefault();
+     Grit_Data('grit+');
+  })
+
+  document.getElementById('grit-').addEventListener('submit', async function(event){
+    event.preventDefault();
+     Grit_Data('grit-');
+  })
+
+  document.getElementById("corupt+").addEventListener('submit', async function(event){
+    event.preventDefault();
+    Corrupt_Data("corupt+")
+  })
+
+  document.getElementById("corupt-").addEventListener('submit', async function(event){
+    event.preventDefault();
+    Corrupt_Data("corupt-")
+  })
 
 // character card buttons---------------------------------------------------------------------------------------------
   document.getElementById('card_next').addEventListener('submit', async function(event){
@@ -321,6 +556,7 @@
     event.preventDefault();
     Card_Data('card_previous')
   })
+
 </script>
 {% endblock content %}
 
