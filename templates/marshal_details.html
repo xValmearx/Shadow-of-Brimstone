@@ -270,6 +270,13 @@
     
     <div>
         <h1>TOKEN BAG</h1>
+        {% for token in character.side_bag.all %}
+
+        <h3>{{token.token.name}}</h3>
+        <p>{{token.token.description}}</p>
+        
+
+        {% endfor %}
     </div>
 
     <div>

@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
+from equipment.models import Token
+
 
 class Character(models.Model):
 
@@ -315,6 +317,13 @@ class Side_Bag(models.Model):
         on_delete=models.CASCADE,
           related_name='side_bag')
     
+    token = models.ForeignKey(
+        Token,
+        on_delete=models.CASCADE,
+          related_name='character_token',
+          default= 1)
+
+
     def __str__(self):
         return "Side Bag"
     
