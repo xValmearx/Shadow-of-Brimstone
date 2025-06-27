@@ -307,3 +307,14 @@ class Passive_Buff(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Side_Bag(models.Model):
+
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='side_bag')
+    
+    def __str__(self):
+        return "Side Bag"
+    
