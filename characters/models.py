@@ -322,6 +322,9 @@ class Side_Bag(models.Model):
         on_delete=models.CASCADE,
           related_name='character_token',
           default= 1)
+    
+    def get_absolute_url(self):
+        return self.assigned_to_character.get_absolute_url()
 
 
     def __str__(self):

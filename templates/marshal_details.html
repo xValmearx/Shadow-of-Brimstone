@@ -268,14 +268,21 @@
 
   <div class = 'resources'>
     
-    <div>
+    <div id = "side_bag">
         <h1>TOKEN BAG</h1>
+        <button><a href = '{% url "add_token" character.pk%}'>Add Token</a></button>
+        <br>
+        <br>
         {% for token in character.side_bag.all %}
-
-        <h3>{{token.token.name}}</h3>
-        <p>{{token.token.description}}</p>
-        
-
+        <div class = 'token_card' id = "token_{{token.pk}}" data-id="{{token.pk}}">
+          <h3>{{token.token.name}}</h3>
+          <p>{{token.token.description}}</p>
+          <button onclick="Delete_Token(
+            document.getElementById('token_{{token.pk}}').getAttribute('data-id'),
+            'token_{{token.pk}}'
+            )">Discard</button>
+        </div>
+        <br>
         {% endfor %}
     </div>
 
@@ -511,6 +518,21 @@
 
   }
 
+  async function Delete_Token(Data,Node){
+    let info = {}
+    info["function"] = "delete_token";
+    info["token_instnace"] = Data
+
+    data_dict = await Send_Data(info);
+
+    token = document.getElementById(Node)
+
+    token.parentNode.removeChild(token)
+
+
+
+
+  }
 
 // health,sanity,grit buttons------------------------------------------------------------------------------------------
   document.getElementById('health+').addEventListener('submit',async function(event){

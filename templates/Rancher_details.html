@@ -3,5 +3,5 @@
 {% block content %}
 
     <p>{{ character.character_name}}</p>
-    <p>{{character.strength}}</p>
+    <a href = '{% url "add_token" character.pk%}'>test_page</a>
 {% endblock content %}

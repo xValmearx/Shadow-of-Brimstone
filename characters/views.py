@@ -1,9 +1,13 @@
-from django.views.generic import ListView,DetailView
+from django.views.generic import ListView,DetailView,CreateView,TemplateView
 from django.urls import reverse
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from .forms import Add_Side_Bag_Token
+
+
 import json
 
-from .models import Character
+from .models import Character, Side_Bag
 
 class All_Characters(ListView):
     model = Character
@@ -123,16 +127,59 @@ class Character_View(DetailView):
                 context["card"] = character.class_card
                 return JsonResponse(context)
             
-            context["data"] = "got data"
-            return JsonResponse(context)
-        
+            elif function == 'delete_token':
+                pk = data["token_instnace"]
+
+                instance = get_object_or_404(Side_Bag, pk=pk)
+                instance.delete()
+
+                context["data"] = "deleted_token"
+                
+                return JsonResponse(context)
+
         except:
             context["error"] = "there seems to be an error"
             return JsonResponse(context)
-
-
+        
     
+    def get_object(self, queryset=None):
+        # Fetch the object fresh from the database
+        obj = super().get_object(queryset)
+        return Character.objects.get(pk=obj.pk)
+
+
     def get_success_url(self):
         obj = self.get_object()
         return reverse("character_detail", kwargs={"pk": obj.pk})
     
+class Create_Side_Bag_Token(CreateView):
+    
+    model = Side_Bag
+    form_class = Add_Side_Bag_Token
+    template_name = "new_side_bag_token.html"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        # Retrieve the URL parameter (e.g., pk)
+        pk = self.kwargs.get('pk')
+        if pk:
+            # Fetch data from the database or set initial values
+            try:
+                obj = Character.objects.get(pk=pk)
+                initial['assigned_to_character'] = obj  # Pre-fill form field
+            except Character.DoesNotExist:
+                pass
+        return initial
+
+    def form_valid(self, form):
+        # Process the form data
+        return super().form_valid(form)
+
+
+    def get_success_url(self):
+        # Dynamically generate the success URL
+
+        return self.object.get_absolute_url()
+    
+    
+
