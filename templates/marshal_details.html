@@ -17,6 +17,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     ">
+    <!-- Health area -->
       <div>
         <h3>Health</h3>
         <h4 id = "current_wounds">{{character.current_health}} / {{character.health}}</h4>
@@ -38,6 +39,7 @@
         </table>
       </div> 
 
+      <!-- Sanity area -->
       <div>
         <h3>Sanity</h3>
         <h4 id = "current_sanity">{{character.current_sanity}} / {{character.sanity}}</h4>
@@ -59,6 +61,7 @@
         </table>
       </div>
 
+      <!-- Corruption area -->
       <div>
         <h3>Corrupt</h3>
         <h4 id = "current_corruption">{{character.current_corruption}} / {{character.corruption}}</h4>
@@ -80,6 +83,7 @@
         </table>
       </div>
 
+      <!-- Grit area -->
       <div>
         <h3>Grit</h3>
         <h4 id = "current_grit">{{character.current_grit}} / {{character.max_grit}}</h4>
@@ -104,6 +108,7 @@
     </div>
   </div>
 
+  <!-- Character stats -->
   <div class = 'stat_info'>
     <table>
       <h1>Stats</h1>
@@ -138,10 +143,16 @@
       </tr>
   </div>
 
+  <!-- Combat stats -->
   <div class = 'stat_info'>
   <table>
     <h1> Combat</h1>
     <h2 id = "initiative"> Initiative: {{character.initiative}}</h2>
+    <tr>
+      <td><h3 id = "defence">Defence: {{character.defence}}</h3></td>
+      <td></td>
+      <td><h3 id = "willpower">WillPower: {{character.willpower}}</h3></td>
+    </tr>
     <tr> 
         <td>
           <h2>Range</h2>
@@ -161,6 +172,7 @@
   </div>
 
 
+  <!-- character abilites -->
   <div class = 'abilites'>
     <h1> Class Ability</h1>
     <p>
@@ -240,26 +252,59 @@
     </table>
     </div>
 
+
     <!-- character buffs -->
+    {% if character.passive_buffs.all%}
     <h1> Passive Buffs </h1>
     {% for buff in character.passive_buffs.all %}
-      <div style="
-      border: solid black; 
-      padding: 5px; 
-      width: 80%;
-      border-radius: 8px;
-      font-size: 18px;"
-      id="buff_{{buff.pk}}"
-      data-id={{buff.pk}}>
+      <div class = 'ability_card' id="buff_{{buff.pk}}" data-id={{buff.pk}}>
         <h3> {{buff.name}} </h3>
         <p> {{buff.text}}</p>
       </div>
       <br>
     {% endfor %}
+    {%endif %}
+
+    <!-- Per Turn -->
+    {% if character.per_turn.all%}
+    <h1> Per Turn </h1>
+    {% for per_turn in character.per_turn.all %}
+      <div class = 'ability_card' id="per_turn_{{per_turn.pk}}" data-id={{per_turn.pk}}>
+        <h3> {{per_turn.name}} </h3>
+        <p> {{per_turn.text}}</p>
+      </div>
+      <br>
+    {% endfor %}
+    {%endif %}
+
+    <!-- Per Fight -->
+    {% if character.per_fight.all%}
+    <h1> Per Fight </h1>
+    {% for per_fight in character.per_fight.all %}
+      <div class = 'ability_card' id="per_fight_{{per_fight.pk}}" data-id={{per_fight.pk}}>
+        <h3> {{per_fight.name}} </h3>
+        <p> {{per_fight.text}}</p>
+      </div>
+      <br>
+    {% endfor %}
+    {%endif %}
+
+    <!-- Per Turn -->
+    {% if character.per_adventure.all%}
+    <h1> Per Adventure </h1>
+    {% for per_adventure in character.per_adventure.all %}
+      <div class = 'ability_card' id="per_adventure_{{per_adventure.pk}}" data-id={{per_adventure.pk}}>
+        <h3> {{per_adventure.name}} </h3>
+        <p> {{per_adventure.text}}</p>
+      </div>
+      <br>
+    {% endfor %}
+    {%endif %}
+
   </div>
 </div>
 
-
+<!-- Character equipment -->
 <div class = 'container'>
   <div class = 'equipment'>
     hello world
@@ -267,9 +312,9 @@
 
 
   <div class = 'resources'>
-
-    <!-- character gold and darkstone -->
     <div style="background-color:  rgb(134, 108, 40); border: solid black 3px; border-radius: 5px;">
+      <!-- Gold area-->
+      <div>
         <h1 class="gold_banner" id = "current_gold">Gold: {{character.gold}}</h1>
         <button onclick="Gold_Data(5)">5</button>
         <button onclick="Gold_Data(10)">10</button>
@@ -281,11 +326,16 @@
           <input type="number" id = 'gold_value' value="0">
           <button type="submit">Enter</button>
         </form>
+      </div>
 
+      <!-- DarkStone area -->
+      <div>
         <h1 class = 'dark_stone_banner' id = 'current_dark_stone'>DarkStone: {{character.dark_stone}}</h1>
         <button onclick="Dark_Stone_Data('+')">+</button>
         <button onclick="Dark_Stone_Data('-')">-</button>
+      </div>
 
+        <!-- XP area -->
         <div>
           <h1 class = "xp_banner" id = 'current_xp'>XP: {{character.xp}} / 500</h1>
           <h2>Level: {{character.level}}</h2>
@@ -301,8 +351,6 @@
           </form>
         </div>
     </div>
-
-    
 
     <!-- character tokens -->
     <div id = "side_bag">

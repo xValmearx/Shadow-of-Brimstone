@@ -18,7 +18,7 @@ class Character(models.Model):
         ("Marshal", "Marshal"),
         ("Rancher", "Rancher"),
         ("LawMan","LawMan"),
-        ("PianoPlayer_SaloonGirl","PianoPlayer_SaloonGirl"),
+        ("PianoPlayer","PianoPlayer"),
         ("IndianScout","IndianScout"),
         ("Bandido","Bandido"),
         ("Preacher","Preacher"),
@@ -314,7 +314,58 @@ class Passive_Buff(models.Model):
     text = models.TextField(blank= False, default= "text here")
 
     def __str__(self):
-        return self.name
+        try:
+            return f'{self.assigned_to_character} {self.name}'
+        except:
+            return self.name
+        
+class Per_Turn(models.Model):
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='per_turn')
+    
+    name = models.CharField(blank= False,default= "buff name here")
+
+    text = models.TextField(blank= False, default= "text here")
+
+    def __str__(self):
+        try:
+            return f'{self.assigned_to_character} {self.name}'
+        except:
+            return self.name
+        
+class Per_Fight(models.Model):
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='per_fight')
+    
+    name = models.CharField(blank= False,default= "buff name here")
+
+    text = models.TextField(blank= False, default= "text here")
+
+    def __str__(self):
+        try:
+            return f'{self.assigned_to_character} {self.name}'
+        except:
+            return self.name
+
+class Per_Adventure(models.Model):
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='per_adventure')
+    
+    name = models.CharField(blank= False,default= "buff name here")
+
+    text = models.TextField(blank= False, default= "text here")
+
+    def __str__(self):
+        try:
+            return f'{self.assigned_to_character} {self.name}'
+        except:
+            return self.name
     
 class Side_Bag(models.Model):
 
@@ -331,6 +382,8 @@ class Side_Bag(models.Model):
     
     def get_absolute_url(self):
         return self.assigned_to_character.get_absolute_url()
+    
+    
 
 
     def __str__(self):

@@ -65,6 +65,16 @@ body{
   display: none;
 }
 
+.ability_card{
+  border: solid black; 
+  padding: 5px; 
+  width: 80%;
+  border-radius: 8px;
+  font-size: 18px;
+
+  background-color:  rgb(177, 145, 65);
+}
+
 .card{
   padding: 6px;
   min-height: 380px;
@@ -135,7 +145,7 @@ body{
 }
 
 .dark_stone_banner{
-  background-color: rgb(40, 1, 110); 
+  background-color: rgb(56, 0, 158); 
   border-radius: 5px; 
   width: 80%; 
   left: 10%; 
