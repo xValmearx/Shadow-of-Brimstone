@@ -289,6 +289,12 @@ class Character(models.Model):
 
     class_card = models.IntegerField(default=1)
 
+    gold = models.IntegerField(default=0)
+    dark_stone = models.IntegerField(default=0)
+
+    xp = models.IntegerField(default=0)
+    level = models.IntegerField(default=1)
+
 
     def __str__(self):
         return self.character_name
@@ -328,5 +334,8 @@ class Side_Bag(models.Model):
 
 
     def __str__(self):
-        return "Side Bag"
+        try:
+            return f'{self.assigned_to_character} {self.token}'
+        except:
+            return "Side Bag"
     

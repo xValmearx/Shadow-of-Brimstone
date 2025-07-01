@@ -240,22 +240,21 @@
     </table>
     </div>
 
+    <!-- character buffs -->
     <h1> Passive Buffs </h1>
     {% for buff in character.passive_buffs.all %}
-
       <div style="
       border: solid black; 
       padding: 5px; 
       width: 80%;
       border-radius: 8px;
-      font-size: 18px;" 
-      data-id={{buff.id}}>
+      font-size: 18px;"
+      id="buff_{{buff.pk}}"
+      data-id={{buff.pk}}>
         <h3> {{buff.name}} </h3>
         <p> {{buff.text}}</p>
       </div>
-
       <br>
-      
     {% endfor %}
   </div>
 </div>
@@ -266,8 +265,46 @@
     hello world
   </div>
 
+
   <div class = 'resources'>
+
+    <!-- character gold and darkstone -->
+    <div style="background-color:  rgb(134, 108, 40); border: solid black 3px; border-radius: 5px;">
+        <h1 class="gold_banner" id = "current_gold">Gold: {{character.gold}}</h1>
+        <button onclick="Gold_Data(5)">5</button>
+        <button onclick="Gold_Data(10)">10</button>
+        <button onclick="Gold_Data(15)">15</button>
+        <br>
+        <br>
+        <form method = 'post' id = 'gold'>
+          {% csrf_token %}
+          <input type="number" id = 'gold_value' value="0">
+          <button type="submit">Enter</button>
+        </form>
+
+        <h1 class = 'dark_stone_banner' id = 'current_dark_stone'>DarkStone: {{character.dark_stone}}</h1>
+        <button onclick="Dark_Stone_Data('+')">+</button>
+        <button onclick="Dark_Stone_Data('-')">-</button>
+
+        <div>
+          <h1 class = "xp_banner" id = 'current_xp'>XP: {{character.xp}} / 500</h1>
+          <h2>Level: {{character.level}}</h2>
+          <button onclick="XP_Data(5)">5</button>
+          <button onclick="XP_Data(10)">10</button>
+          <button onclick="XP_Data(15)">15</button>
+          <br>
+          <br>
+          <form method = 'post' id = 'xp'>
+            {% csrf_token %}
+            <input type="number" id = 'xp_value' value="0">
+            <button type="submit">Enter</button>
+          </form>
+        </div>
+    </div>
+
     
+
+    <!-- character tokens -->
     <div id = "side_bag">
         <h1>TOKEN BAG</h1>
         <button><a href = '{% url "add_token" character.pk%}'>Add Token</a></button>
@@ -286,22 +323,10 @@
         {% endfor %}
     </div>
 
-    <div>
-        <h1>GOLD / DARKSTONE</h1>
-    </div>
-
-    <div>
-        <h1>XP</h1>
-    </div>
-
-
   </div>
 </div>
 
-
-
-
-  
+ 
 
 <script>
   // get csrf token for safty
@@ -310,9 +335,10 @@
   // get the primary key of the model
   const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
 
+  // get the current card data
   let class_card = document.querySelector('meta[name="csrf-token"]').getAttribute('card_data');
 
-  
+  // marshall only code for increasing max grit
   if(class_card == 3){
     var card_3_equiped = true
   }
@@ -486,6 +512,48 @@
     }
   }
 
+  async function Gold_Data(Data){
+  let info = {}
+  info['function'] = "gold"
+  info["gold_value"] = Data
+
+  data_dict = await Send_Data(info);
+  gold = data_dict["new_gold_value"]
+
+  current_gold = document.getElementById("current_gold")
+  current_gold.innerHTML = `Gold: ${gold}`
+
+  document.getElementById('gold_value').value = 0
+
+}
+
+  async function Dark_Stone_Data(Data){
+    let info = {}
+    info['function'] = "dark_stone"
+    info["dark_stone_value"] = Data
+
+    data_dict = await Send_Data(info);
+    dark_stone = data_dict["new_dark_stone_value"]
+
+    current_gold = document.getElementById("current_dark_stone")
+    current_gold.innerHTML = `DarkStone: ${dark_stone}`
+  }
+
+  async function XP_Data(Data){
+  let info = {}
+  info['function'] = "XP"
+  info["xp_value"] = Data
+
+  data_dict = await Send_Data(info);
+  xp = data_dict["new_xp_value"]
+
+  current_xp = document.getElementById("current_xp")
+  current_xp.innerHTML = `XP: ${xp} / 500`
+
+  document.getElementById('xp_value').value = 0
+
+}
+
   async function Update_Character_Date(Data){
 
     // assign character stats
@@ -586,6 +654,18 @@
     Card_Data('card_previous')
   })
 
+// resource buttons-----------------------------------------------------------------------------------------------------
+  document.getElementById('gold').addEventListener('submit',async function(event){
+    event.preventDefault();
+    gold_value = document.getElementById('gold_value').value;
+    Gold_Data(gold_value)
+  })
+
+  document.getElementById('xp').addEventListener('submit', async function(event){
+    event.preventDefault();
+    xp_value = document.getElementById('xp_value').value;
+    XP_Data(xp_value)
+  })
 </script>
 {% endblock content %}
 

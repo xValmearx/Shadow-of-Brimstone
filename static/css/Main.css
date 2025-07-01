@@ -103,8 +103,6 @@ body{
 
 .equipment{
   background-color: #bb9430;
-  height: 600px;
-
   width: 60vw;
   margin: 5px;
 
@@ -114,8 +112,6 @@ body{
 .resources{
   padding: 10px;
   background-color: #bb9430;
-  max-height: 600px;
-  min-height: 600px;
   margin: 5px;
   width: 40vw;
   border: solid black;
@@ -127,8 +123,31 @@ body{
   flex-direction: column;
   text-align: center;
   align-content: center;
+  justify-content: center;
+}
 
+.gold_banner{
+  background-color: rgb(201, 171, 2); 
+  border-radius: 5px; 
+  width: 80%; 
+  left: 10%; 
+  position: relative;
+}
 
+.dark_stone_banner{
+  background-color: rgb(40, 1, 110); 
+  border-radius: 5px; 
+  width: 80%; 
+  left: 10%; 
+  position: relative;
+}
+
+.xp_banner{
+  background-color: rgb(2, 211, 12); 
+  border-radius: 5px; 
+  width: 80%; 
+  left: 10%; 
+  position: relative;
 }
 
 .resources::-webkit-scrollbar{

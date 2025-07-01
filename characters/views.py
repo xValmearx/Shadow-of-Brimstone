@@ -109,6 +109,31 @@ class Character_View(DetailView):
                 context["corruption"] = character.current_corruption
                 return JsonResponse(context)
             
+            elif function == 'gold':
+                a = character.gold + int(data["gold_value"])
+                character.gold = a
+                character.save()
+
+                context["new_gold_value"] = character.gold
+                return JsonResponse(context)
+            
+            elif function == 'dark_stone':
+                if data['dark_stone_value'] == '+':
+                    character.dark_stone += 1
+                elif data['dark_stone_value'] == '-' and character.dark_stone > 0:
+                    character.dark_stone -= 1
+                character.save()
+
+                context["new_dark_stone_value"] = character.dark_stone
+                return JsonResponse(context)
+
+            elif function == "XP":
+                a = character.xp + int(data["xp_value"])
+                character.xp = a
+                character.save()
+
+                context["new_xp_value"] = character.xp
+                return JsonResponse(context)
             elif function == "card_next":
                 character.class_card += 1
 
