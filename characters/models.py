@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
-from equipment.models import Token
+from equipment.models import Token, Gear
 
 
 class Character(models.Model):
@@ -277,6 +277,7 @@ class Character(models.Model):
     def weight(self):
         return 5 + self.strength()
     
+    current_weight = models.IntegerField(default=0)
 
     current_health = models.IntegerField(default = 0)
     current_sanity = models.IntegerField(default= 0 )
@@ -384,11 +385,30 @@ class Side_Bag(models.Model):
         return self.assigned_to_character.get_absolute_url()
     
     
-
-
     def __str__(self):
         try:
             return f'{self.assigned_to_character} {self.token}'
         except:
             return "Side Bag"
     
+class Character_Gear(models.Model):
+    
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='equiped_gear')
+    
+    gear = models.ForeignKey(
+        Gear,
+        on_delete=models.CASCADE,
+          related_name='character_gear',
+          default= 1)
+    
+    def get_absolute_url(self):
+        return self.assigned_to_character.get_absolute_url()
+    
+    def __str__(self):
+        try:
+            return f'{self.assigned_to_character} {self.gear}'
+        except:
+            return "Character Gear"

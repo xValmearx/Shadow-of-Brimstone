@@ -227,7 +227,6 @@
         <h2>+1 Max Grit</h2>
       {% endif %}
     </div>
-
     <br>
 
      <!-- card buttons -->
@@ -252,62 +251,230 @@
     </table>
     </div>
 
-
-    <!-- character buffs -->
+<!-- passivs buffs -->
+    <div id = "passive" 
     {% if character.passive_buffs.all%}
-    <h1> Passive Buffs </h1>
-    {% for buff in character.passive_buffs.all %}
-      <div class = 'ability_card' id="buff_{{buff.pk}}" data-id={{buff.pk}}>
-        <h3> {{buff.name}} </h3>
-        <p> {{buff.text}}</p>
-      </div>
-      <br>
-    {% endfor %}
-    {%endif %}
-
-    <!-- Per Turn -->
+      style="display: block; width: 100%; text-align: center; justify-items: center;"
+    {% else %}
+      style="display: none;"
+    {% endif %}> 
+    
+      <!-- character buffs -->
+      <h1> Passive Buffs </h1>
+      {% for buff in character.passive_buffs.all %}
+        <div class = 'ability_card'>
+          <h3> {{buff.name}} </h3>
+          <p> {{buff.text}}</p>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+    
+<!-- once per turn actions -->
+    <div id = "per_turn"
     {% if character.per_turn.all%}
-    <h1> Per Turn </h1>
-    {% for per_turn in character.per_turn.all %}
-      <div class = 'ability_card' id="per_turn_{{per_turn.pk}}" data-id={{per_turn.pk}}>
-        <h3> {{per_turn.name}} </h3>
-        <p> {{per_turn.text}}</p>
-      </div>
-      <br>
-    {% endfor %}
-    {%endif %}
-
-    <!-- Per Fight -->
+      style="display: block; width: 100%; text-align: center; justify-items: center;"
+    {% else %}
+      style="display: none;"
+    {% endif %}>
+      <!-- Per Turn -->
+      <h1> Per Turn </h1>
+      {% for per_turn in character.per_turn.all %}
+        <div class = 'ability_card' id="per_turn_{{per_turn.pk}}" data-id={{per_turn.pk}}>
+          <h3> {{per_turn.name}} </h3>
+          <p> {{per_turn.text}}</p>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+  
+<!-- once per fight actions -->
+    <div id = "per_fight"
     {% if character.per_fight.all%}
-    <h1> Per Fight </h1>
-    {% for per_fight in character.per_fight.all %}
-      <div class = 'ability_card' id="per_fight_{{per_fight.pk}}" data-id={{per_fight.pk}}>
-        <h3> {{per_fight.name}} </h3>
-        <p> {{per_fight.text}}</p>
-      </div>
-      <br>
-    {% endfor %}
-    {%endif %}
-
-    <!-- Per Turn -->
+      style="display: block; width: 100%; text-align: center; justify-items: center;"
+    {% else %}
+      style="display: none;"
+    {% endif %}>
+      <!-- Per Fight -->
+      <h1> Per Fight </h1>
+      {% for per_fight in character.per_fight.all %}
+        <div class = 'ability_card' id="per_fight_{{per_fight.pk}}" data-id={{per_fight.pk}}>
+          <h3> {{per_fight.name}} </h3>
+          <p> {{per_fight.text}}</p>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+    
+<!-- once per adventure actions -->
+    <div id = 'per_adventure'
     {% if character.per_adventure.all%}
-    <h1> Per Adventure </h1>
-    {% for per_adventure in character.per_adventure.all %}
-      <div class = 'ability_card' id="per_adventure_{{per_adventure.pk}}" data-id={{per_adventure.pk}}>
-        <h3> {{per_adventure.name}} </h3>
-        <p> {{per_adventure.text}}</p>
-      </div>
-      <br>
-    {% endfor %}
-    {%endif %}
-
+      style="display: block; width: 100%; text-align: center; justify-items: center;"
+    {% else %}
+      style="display: none;"
+    {% endif %}>
+      <!-- Per Adventure -->
+      <h1> Per Adventure </h1>
+      {% for per_adventure in character.per_adventure.all %}
+        <div class = 'ability_card' id="per_adventure_{{per_adventure.pk}}" data-id={{per_adventure.pk}}>
+          <h3> {{per_adventure.name}} </h3>
+          <p> {{per_adventure.text}}</p>
+        </div>
+        <br>
+      {% endfor %}
+    </div>
+    
   </div>
 </div>
 
 <!-- Character equipment -->
 <div class = 'container'>
   <div class = 'equipment'>
-    hello world
+
+    <button><a href = '{% url "add_gear" character.pk%}'>Add gear</a></button>
+    <br>
+    <br>
+
+    {% for gear in character.equiped_gear.all %}
+      <div class = 'gear_card' 
+      id = "gear_{{gear.pk}}" 
+      data-id="{{gear.pk}}"
+      >
+          <h2>{{gear.gear.name}}</h2>
+          <p>{{gear.gear.description}}</p>
+          <h3>${{gear.gear.value}}</h3>
+      </div>
+      <br>
+
+      <script>
+        stats = document.getElementById("gear_{{gear.pk}}")
+
+        gear_instance = stats.getAttribute('data-id')
+
+        name = '{{gear.gear.name}}'
+        description = '{{gear.gear.description}}'
+        buff_type = '{{gear.gear.buff_type}}'
+
+
+        agility = '{{gear.gear.agility_buff}}'
+        cunning = '{{gear.gear.cunning_buff}}'
+        spirit = '{{gear.gear.spirit_buff}}'
+        strength = '{{gear.gear.strength_buff}}'
+        lore = '{{gear.gear.lore_buff}}'
+        luck = '{{gear.gear.luck_buff}}'
+
+        equipped = '{{gear.gear.equipped}}'
+
+        console.log(equipped)
+
+        if(equipped == 'False'){
+          console.log(gear_instance,name,'not equipped')
+        }
+
+        if(buff_type == 'passive'){
+
+          //get passive and change its css
+          let passives = document.getElementById('passive')
+          passives.style.display = 'block';
+          passives.style.width = "100%";
+          passives.style.test_align = 'center';
+          passives.style.justifyItems = 'center';
+
+          // create new div that will be added to passive
+          new_div = document.createElement('div')
+          new_h3 = document.createElement('h3')
+          new_text = document.createElement('p')
+          new_br = document.createElement('br')
+
+          new_h3.textContent = name
+          new_text.textContent = description
+          new_div.className = "ability_card"
+
+          new_div.appendChild(new_h3)
+          new_div.appendChild(new_text)
+
+          passives.appendChild(new_div)
+          passives.appendChild(new_br)
+        }
+
+        if(buff_type == "turn"){
+          //get passive and change its css
+          let div_location = document.getElementById('per_turn')
+          div_location.style.display = 'block';
+          div_location.style.width = "100%";
+          div_location.style.test_align = 'center';
+          div_location.style.justifyItems = 'center';
+
+          // create new div that will be added to passive
+          new_div = document.createElement('div')
+          new_h3 = document.createElement('h3')
+          new_text = document.createElement('p')
+          new_br = document.createElement('br')
+
+          new_h3.textContent = name
+          new_text.textContent = description
+          new_div.className = "ability_card"
+
+          new_div.appendChild(new_h3)
+          new_div.appendChild(new_text)
+
+          div_location.appendChild(new_div)
+          div_location.appendChild(new_br)
+        }
+      
+        if(buff_type == "fight"){
+          //get passive and change its css
+          let div_location = document.getElementById('per_fight')
+          div_location.style.display = 'block';
+          div_location.style.width = "100%";
+          div_location.style.test_align = 'center';
+          div_location.style.justifyItems = 'center';
+
+          // create new div that will be added to passive
+          new_div = document.createElement('div')
+          new_h3 = document.createElement('h3')
+          new_text = document.createElement('p')
+          new_br = document.createElement('br')
+
+          new_h3.textContent = name
+          new_text.textContent = description
+          new_div.className = "ability_card"
+
+          new_div.appendChild(new_h3)
+          new_div.appendChild(new_text)
+
+          div_location.appendChild(new_div)
+          div_location.appendChild(new_br)
+        }
+      
+        if(buff_type == "adventure"){
+          //get passive and change its css
+          let div_location = document.getElementById('per_adventure')
+          div_location.style.display = 'block';
+          div_location.style.width = "100%";
+          div_location.style.test_align = 'center';
+          div_location.style.justifyItems = 'center';
+
+          // create new div that will be added to passive
+          new_div = document.createElement('div')
+          new_h3 = document.createElement('h3')
+          new_text = document.createElement('p')
+          new_br = document.createElement('br')
+
+          new_h3.textContent = name
+          new_text.textContent = description
+          new_div.className = "ability_card"
+
+          new_div.appendChild(new_h3)
+          new_div.appendChild(new_text)
+
+          div_location.appendChild(new_div)
+          div_location.appendChild(new_br)
+        }
+
+      </script>
+    {% endfor %}
+    
   </div>
 
 
@@ -404,7 +571,7 @@
   async function Send_Data(Data) {
 
     //sending post request to character 
-    let send_data = await fetch(`/characters/${pk}`,{
+    let send_data = await fetch(`/characters/${pk}/`,{
       headers: {
         'Content-Type':'application/json',
         'X-CSRFToken': csrfToken,},
@@ -614,15 +781,9 @@
     // merge two dictionaries together
     var info = Object.assign({},a,Data)
 
-    console.log("sending information")
-    console.log(info)
 
     // get new dictionary of information to update character stats
     data_dict = await Send_Data(info);
-
-    console.log("reciving information")
-    console.log(data_dict)
-
 
     if("health" in data_dict){
       health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
@@ -666,7 +827,7 @@
      Sanity_Data('sanity+');
   })//health form function
 
-   document.getElementById('sanity-').addEventListener('submit',async function(event){
+  document.getElementById('sanity-').addEventListener('submit',async function(event){
     event.preventDefault();
      Sanity_Data('sanity-');
   })//health form function

@@ -2,12 +2,11 @@ from django.views.generic import ListView,DetailView,CreateView,TemplateView
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .forms import Add_Side_Bag_Token
-
+from .forms import Add_Side_Bag_Token, Add_Character_Gear
 
 import json
 
-from .models import Character, Side_Bag
+from .models import Character, Side_Bag, Character_Gear
 
 class All_Characters(ListView):
     model = Character
@@ -50,6 +49,10 @@ class Character_View(DetailView):
                     context["max_grit"] = a
                     context["current_grit"] = character.current_grit
                     return JsonResponse(context)
+
+
+
+                return JsonResponse({"health": character.current_health})
 
             if function == 'health+':
                 if character.current_health < character.health:
@@ -182,6 +185,33 @@ class Create_Side_Bag_Token(CreateView):
     model = Side_Bag
     form_class = Add_Side_Bag_Token
     template_name = "new_side_bag_token.html"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        # Retrieve the URL parameter (e.g., pk)
+        pk = self.kwargs.get('pk')
+        if pk:
+            # Fetch data from the database or set initial values
+            try:
+                obj = Character.objects.get(pk=pk)
+                initial['assigned_to_character'] = obj  # Pre-fill form field
+            except Character.DoesNotExist:
+                pass
+        return initial
+
+    def form_valid(self, form):
+        # Process the form data
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        # Dynamically generate the success URL
+
+        return self.object.get_absolute_url()
+    
+class Create_Character_Gear(CreateView):
+    model = Character_Gear
+    form_class = Add_Character_Gear
+    template_name = "new_character_gear.html"
 
     def get_initial(self):
         initial = super().get_initial()
