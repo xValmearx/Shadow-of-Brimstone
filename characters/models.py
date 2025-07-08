@@ -30,254 +30,220 @@ class Character(models.Model):
     # user gets to name the character
     character_name = models.CharField(max_length=25,blank=False)
 
-    @property
-    def agility(self):
-        if self.character_class == "Marshal":
-            return 3
-        if self.character_class == "Rancher":
-            return 2
-        if self.character_class == "LawMan":
-            return 2
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 4
-        if self.character_class == "IndianScout":
-            return 3
-        if self.character_class == "Bandido":
-            return 2
-        if self.character_class == "Preacher":
-            return 1
-        if self.character_class == "GunSlinger":
-            return 3
-    @property
-    def cunning(self):
-        if self.character_class == "Marshal":
-            return 4
-        if self.character_class == "Rancher":
-            return 2
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 3
-        if self.character_class == "IndianScout":
-            return 2
-        if self.character_class == "Bandido":
-            return 1
-        if self.character_class == "Preacher":
-            return 2
-        if self.character_class == "GunSlinger":
-            return 3
-    @property
-    def spirit(self):
-        if self.character_class == "Marshal":
-            return 2
-        if self.character_class == "Rancher":
-            return 3
-        if self.character_class == "LawMan":
-            return 1
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 3
-        if self.character_class == "IndianScout":
-            return 3
-        if self.character_class == "Bandido":
-            return 3
-        if self.character_class == "Preacher":
-            return 4
-        if self.character_class == "GunSlinger":
-            return 2
-    @property 
-    def strength(self):
-        if self.character_class == "Marshal":
-            return 2
-        if self.character_class == "Rancher":
-            return 3
-        if self.character_class == "LawMan":
-            return 3
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 1
-        if self.character_class == "IndianScout":
-            return 2
-        if self.character_class == "Bandido":
-            return 4
-        if self.character_class == "Preacher":
-            return 3
-        if self.character_class == "GunSlinger":
-            return 2
-    @property
-    def lore(self):
-        if self.character_class == "Marshal":
-            return 1
-        if self.character_class == "Rancher":
-            return 4
-        if self.character_class == "LawMan":
-            return 2
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 2
-        if self.character_class == "IndianScout":
-            return 3
-        if self.character_class == "Bandido":
-            return 3
-        if self.character_class == "Preacher":
-            return 3
-        if self.character_class == "GunSlinger":
-            return 2
-    @property
-    def luck(self):
-        if self.character_class == "Marshal":
-            return 3
-        if self.character_class == "Rancher":
-            return 1
-        if self.character_class == "LawMan":
-            return 3
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 3
-        if self.character_class == "IndianScout":
-            return 2
-        if self.character_class == "Bandido":
-            return 2
-        if self.character_class == "Preacher":
-            return 2
-        if self.character_class == "GunSlinger":
-          
-            return 4
+    character_init = models.BooleanField(default= False)
 
-    @property
-    def initiative(self):
-        if self.character_class == "Marshal":
-            return 4
-        if self.character_class == "Rancher":
-            return 3
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 5
-        if self.character_class == "IndianScout":
-            return 5
-        if self.character_class == "Bandido":
-            return 3
-        if self.character_class == "Preacher":
-            return 2
-        if self.character_class == "GunSlinger":
-            return 6
-    @property 
-    def range_to_hit(self):
-        if self.character_class == "Marshal":
-            return 4
-        if self.character_class == "Rancher":
-            return 4
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 4
-        if self.character_class == "IndianScout":
-            return 4
-        if self.character_class == "Bandido":
-            return 5
-        if self.character_class == "Preacher":
-            return 5
-        if self.character_class == "GunSlinger":
-            return 3
-    @property
-    def melee_to_hit(self):
-        if self.character_class == "Marshal":
-            return 4
-        if self.character_class == "Rancher":
-            return 4
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 4
-        if self.character_class == "IndianScout":
-            return 4
-        if self.character_class == "Bandido":
-            return 4
-        if self.character_class == "Preacher":
-            return 4
-        if self.character_class == "GunSlinger":
-            return 5     
-    @property
-    def combat(self):
-        if self.character_class == "GunSlinger":
-            return 1
-        else:
-            return 2
+    # skills
+    agility = models.IntegerField(default=0)
+    cunning = models.IntegerField(default=0)
+    spirit = models.IntegerField(default=0)
+    strength = models.IntegerField(default=0)
+    luck = models.IntegerField(default=0)
+    lore = models.IntegerField(default=0)
+    weight = models.IntegerField(default=0)
+
+    # combat skills
+    initiative = models.IntegerField(default=0)
+    range_to_hit = models.IntegerField(default=0)
+    melee_to_hit = models.IntegerField(default=0)
+    combat = models.IntegerField(default=0)
     
-    @property
-    def health(self):
-        if self.character_class == "Marshal":
-            return 10
-        if self.character_class == "Rancher":
-            return 14
-        if self.character_class == "LawMan":
-            return 12
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 8
-        if self.character_class == "IndianScout":
-            return 10
-        if self.character_class == "Bandido":
-            return 16
-        if self.character_class == "Preacher":
-            return 12
-        if self.character_class == "GunSlinger":
-            return 10
-    @property
-    def defence(self):
-        if self.character_class == "Marshal":
-            return 3
-        if self.character_class == "Rancher":
-            return 4
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 3
-        if self.character_class == "IndianScout":
-            return 4
-        if self.character_class == "Bandido":
-            return 4
-        if self.character_class == "Preacher":
-            return 5
-        if self.character_class == "GunSlinger":
-            return 5
-    @property
-    def sanity(self):
-        if self.character_class == "Marshal":
-            return 10
-        if self.character_class == "Rancher":
-            return 10
-        if self.character_class == "LawMan":
-            return 12
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 14
-        if self.character_class == "IndianScout":
-            return 10
-        if self.character_class == "Bandido":
-            return 8
-        if self.character_class == "Preacher":
-            return 10
-        if self.character_class == "GunSlinger":
-            return 12
-    @property
-    def willpower(self):
-        if self.character_class == "Marshal":
-            return 4
-        if self.character_class == "Rancher":
-            return 4
-        if self.character_class == "LawMan":
-            return 4
-        if self.character_class == "PianoPlayer_SaloonGirl":
-            return 4
-        if self.character_class == "IndianScout":
-            return 4
-        if self.character_class == "Bandido":
-            return 5
-        if self.character_class == "Preacher":
-            return 3
-        if self.character_class == "GunSlinger":
-            return 4
-    
-    @property
-    def weight(self):
-        return 5 + self.strength()
-    
+# health and sanity
+    health = models.IntegerField(default=0)
+    defence = models.IntegerField(default=0)
+    sanity = models.IntegerField(default=0)
+    willpower = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+
+        if self.character_init == False:
+            if self.character_class == 'Marshal':
+
+                # stats
+                self.agility = 3
+                self.cunning = 4
+                self.spirit = 2
+                self.strength = 2
+                self.lore = 1
+                self.luck = 3
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 4
+                self.range_to_hit = 4
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 10
+                self.defence = 3
+                self.sanity = 10
+                self.willpower = 4
+
+            elif self.character_class == 'Rancher':
+                # stats
+                self.agility = 2
+                self.cunning = 2
+                self.spirit = 3
+                self.strength = 3
+                self.lore = 4
+                self.luck = 1
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 3
+                self.range_to_hit = 4
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 14
+                self.defence = 4
+                self.sanity = 10
+                self.willpower = 4
+
+            elif self.character_class == 'LawMan':
+                # stats
+                self.agility = 2
+                self.cunning = 4
+                self.spirit = 1
+                self.strength = 3
+                self.lore = 2
+                self.luck = 3
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 4
+                self.range_to_hit = 4
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 12
+                self.defence = 4
+                self.sanity = 12
+                self.willpower = 4
+
+            elif self.character_class == 'PianoPlayer':
+                # stats
+                self.agility = 4
+                self.cunning = 3
+                self.spirit = 3
+                self.strength = 1
+                self.lore = 2
+                self.luck = 3
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 5
+                self.range_to_hit = 4
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 8
+                self.defence = 3
+                self.sanity = 14
+                self.willpower = 4
+
+            elif self.character_class == 'IndianScout':
+                # stats
+                self.agility = 3
+                self.cunning = 2
+                self.spirit = 3
+                self.strength = 2
+                self.lore = 3
+                self.luck = 2
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 5
+                self.range_to_hit = 4
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 10
+                self.defence = 3
+                self.sanity = 10
+                self.willpower = 4
+
+            elif self.character_class == 'Bandido':
+                # stats
+                self.agility = 2
+                self.cunning = 1
+                self.spirit = 3
+                self.strength = 4
+                self.lore = 3
+                self.luck = 2
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 3
+                self.range_to_hit = 5
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 16
+                self.defence = 4
+                self.sanity = 8
+                self.willpower = 5
+
+            if self.character_class == 'Preacher':
+                # stats
+                self.agility = 1
+                self.cunning = 2
+                self.spirit = 4
+                self.strength = 3
+                self.lore = 3
+                self.luck = 2
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 2
+                self.range_to_hit = 5
+                self.melee_to_hit = 4
+                self.combat = 2
+
+                # health and sanity
+                self.health = 12
+                self.defence = 5
+                self.sanity = 10
+                self.willpower = 3
+
+            if self.character_class == 'GunSlinger':
+                # stats
+                self.agility = 3
+                self.cunning = 3
+                self.spirit = 2
+                self.strength = 2
+                self.lore = 2
+                self.luck = 4
+                
+                self.weight = 5 + self.strength
+
+                # combat stats
+                self.initiative = 6
+                self.range_to_hit = 3
+                self.melee_to_hit = 5
+                self.combat = 1
+
+                # health and sanity
+                self.health = 10
+                self.defence = 5
+                self.sanity = 12
+                self.willpower = 4
+
+            self.character_init = True
+        super(Character,self).save(*args, **kwargs)
+  
     current_weight = models.IntegerField(default=0)
 
     current_health = models.IntegerField(default = 0)
@@ -303,7 +269,8 @@ class Character(models.Model):
     
     def get_absolute_url(self):
         return reverse("character_detail",kwargs={'pk': self.pk})
-    
+
+# character buffs    
 class Passive_Buff(models.Model):
 
     assigned_to_character = models.ForeignKey(
@@ -369,6 +336,7 @@ class Per_Adventure(models.Model):
         except:
             return self.name
     
+# gear and equipment
 class Side_Bag(models.Model):
 
     assigned_to_character = models.ForeignKey(
