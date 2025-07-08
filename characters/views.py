@@ -32,10 +32,23 @@ class Character_View(DetailView):
             function = data.get('function')
 
             if function == "update":
+
+                if 'luck' in data.keys():
+                    a = character.luck + int(data['luck'])
+                    character.luck = a
+                    character.save()
+
+                    context['luck'] = character.luck
+                    character.save()
+                    return JsonResponse(context)
+
                 if "health" in data.keys():
                     a = character.health + data["health"]
                     context["health"] = a
                     context["current_health"] = character.current_health
+                    character.health = a
+                    
+                    character.save()
                     return JsonResponse(context)
                 
                 if "max_grit" in data.keys():
@@ -157,13 +170,24 @@ class Character_View(DetailView):
             
             elif function == 'delete_token':
                 pk = data["token_instnace"]
-
                 instance = get_object_or_404(Side_Bag, pk=pk)
                 instance.delete()
 
                 context["data"] = "deleted_token"
                 
                 return JsonResponse(context)
+            
+            elif function == "equip_gear_inctance":
+                pk = data["gear_instance"]
+                instance = get_object_or_404(Character_Gear,pk = pk)
+                instance.equiped = True
+
+                instance.save()
+
+                context[str(instance.gear.name)] = 'is now equiped'
+                return JsonResponse(context)
+
+
 
         except:
             context["error"] = "there seems to be an error"

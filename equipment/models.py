@@ -15,8 +15,6 @@ class Gear(models.Model):
     name = models.CharField(default="Gear Name")
     description = models.TextField(default="Dose stuff")
 
-    equipped = models.BooleanField(default=False)
-
     buff_options = (
         ("none","none"),
         ('passive','passive'),

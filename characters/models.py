@@ -139,6 +139,7 @@ class Character(models.Model):
         if self.character_class == "GunSlinger":
           
             return 4
+
     @property
     def initiative(self):
         if self.character_class == "Marshal":
@@ -192,14 +193,14 @@ class Character(models.Model):
         if self.character_class == "Preacher":
             return 4
         if self.character_class == "GunSlinger":
-            return 5
-        
+            return 5     
     @property
     def combat(self):
         if self.character_class == "GunSlinger":
             return 1
         else:
             return 2
+    
     @property
     def health(self):
         if self.character_class == "Marshal":
@@ -403,6 +404,8 @@ class Character_Gear(models.Model):
         on_delete=models.CASCADE,
           related_name='character_gear',
           default= 1)
+    
+    equiped = models.BooleanField(default= False)
     
     def get_absolute_url(self):
         return self.assigned_to_character.get_absolute_url()
