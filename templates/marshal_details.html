@@ -344,11 +344,18 @@
     {% for gear in character.equiped_gear.all %}
       <div class = 'gear_card' 
       id = "gear_{{gear.pk}}" 
-      data-id="{{gear.pk}}"
+      agility = '{{gear.gear.agility_buff}}'
+      cunning = '{{gear.gear.cunning_buff}}'
+      spirit = '{{gear.gear.spirit_buff}}'
+      strength = '{{gear.gear.strength_buff}}'
+      lore = '{{gear.gear.lore_buff}}'
+      luck = '{{gear.gear.luck_buff}}'
       >
           <h2>{{gear.gear.name}}</h2>
           <p>{{gear.gear.description}}</p>
+          <button onclick="Delete_Gear('{{gear.pk}}','gear_{{gear.pk}}')">Discard</button>
           <h3>${{gear.gear.value}}</h3>
+
       </div>
       <br>
 
@@ -399,9 +406,6 @@
         // get new dictionary of information to update character stats
         data_dict = await Send_Data(info);
 
-        console.log('recived data')
-        console.log(data_dict)
-
         if("health" in data_dict){
           health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
         }
@@ -440,17 +444,49 @@
       
         async function equip_gear_instance(Data){
           info = {}
-          info['function'] = "equip_gear_inctance"
+          info['function'] = "equip_gear_instance"
           info['gear_instance'] = Data
 
           data_dict = await Send_Data(info);
-          console.log(data_dict)
-
         }
 
-        stats = document.getElementById("gear_{{gear.pk}}")
+        async function Delete_Gear(Data,Node){
+          info = {}
+          info['function'] = "delete_gear"
+          info['gear_instance'] = Data
 
-        gear_instance = stats.getAttribute('data-id')
+          data_dict = await Send_Data(info);
+
+          gear = document.getElementById(Node)
+
+          agility = gear.getAttribute('agility')
+          cunning = gear.getAttribute('cunning')
+          spirit = gear.getAttribute('spirit')
+          strength = gear.getAttribute('strength')
+          lore = gear.getAttribute('lore')
+          luck = gear.getAttribute('luck')
+
+          info = {}
+          info['agility'] = -agility
+          info['cunning'] = -cunning
+          info['spirit'] = -spirit
+          info['strength'] = -strength
+          info['lore'] = -lore
+          info['luck'] = -luck
+          Update_Character_Date(info)
+
+          
+          gear.parentNode.removeChild(gear)
+
+          perk_instance = `gear_perk_${Data}`
+          console.log(perk_instance)
+
+          perk = document.getElementById(perk_instance)
+
+          perk.parentNode.removeChild(perk)
+
+        }
+      
 
         name = '{{gear.gear.name}}'
         description = '{{gear.gear.description}}'
@@ -466,18 +502,17 @@
 
         equiped = '{{gear.equiped}}'
 
-        console.log
 
         if(equiped == 'False'){
-          console.log(gear_instance,name,'not equipped')
-
-          equip_gear_instance(gear_instance)
+          equip_gear_instance('{{gear.pk}}')
 
           info = {}
+          info['agility'] = agility
+          info['cunning'] = cunning
+          info['spirit'] = spirit
+          info['strength'] = strength
+          info['lore'] = lore
           info['luck'] = luck
-
-          console.log("sending data")
-          console.log(info)
           Update_Character_Date(info)
         }
 
@@ -504,6 +539,7 @@
 
           new_div.appendChild(new_h3)
           new_div.appendChild(new_text)
+          new_div.setAttribute('id','gear_perk_{{gear.pk}}')
 
           passives.appendChild(new_div)
           passives.appendChild(new_br)
@@ -529,6 +565,7 @@
 
           new_div.appendChild(new_h3)
           new_div.appendChild(new_text)
+           new_div.setAttribute('id','gear_perk_{{gear.pk}}')
 
           div_location.appendChild(new_div)
           div_location.appendChild(new_br)
@@ -554,6 +591,7 @@
 
           new_div.appendChild(new_h3)
           new_div.appendChild(new_text)
+           new_div.setAttribute('id','gear_perk_{{gear.pk}}')
 
           div_location.appendChild(new_div)
           div_location.appendChild(new_br)
@@ -579,6 +617,7 @@
 
           new_div.appendChild(new_h3)
           new_div.appendChild(new_text)
+           new_div.setAttribute('id','gear_perk_{{gear.pk}}')
 
           div_location.appendChild(new_div)
           div_location.appendChild(new_br)
@@ -642,12 +681,10 @@
         <br>
         <br>
         {% for token in character.side_bag.all %}
-        <div class = 'token_card' id = "token_{{token.pk}}" data-id="{{token.pk}}">
+        <div class = 'token_card' id = 'token_{{token.pk}}'>
           <h3>{{token.token.name}}</h3>
           <p>{{token.token.description}}</p>
-          <button onclick="Delete_Token(
-            document.getElementById('token_{{token.pk}}').getAttribute('data-id'),
-            'token_{{token.pk}}'
+          <button onclick="Delete_Token('{{token.pk}}','token_{{token.pk}}'
             )">Discard</button>
         </div>
         <br>

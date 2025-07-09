@@ -31,8 +31,55 @@ class Character_View(DetailView):
             # see what function we are preforming 
             function = data.get('function')
 
+            # if the function is updating the character stats
             if function == "update":
 
+        # Update the characters agility based on the value associated with the 'agility' key in the data dictionary
+                if 'agility' in data.keys():
+                    a = character.agility + int(data['agility'])
+                    character.agility = a
+                    character.save()
+
+                    context['luck'] = character.agility
+                    character.save()
+
+        # Update the characters cunning based on the value associated with the 'cunning' key in the data dictionary
+                if 'cunning' in data.keys():
+                    a = character.cunning + int(data['cunning'])
+                    character.cunning = a
+                    character.save()
+
+                    context['cunning'] = character.cunning
+                    character.save()
+
+        # Update the characters spirit based on the value associated with the 'spirit' key in the data dictionary
+                if 'spirit' in data.keys():
+                    a = character.spirit + int(data['spirit'])
+                    character.spirit = a
+                    character.save()
+
+                    context['spirit'] = character.spirit
+                    character.save()
+
+        # Update the characters strength based on the value associated with the 'strength' key in the data dictionary
+                if 'strength' in data.keys():
+                    a = character.strength + int(data['strength'])
+                    character.strength = a
+                    character.save()
+
+                    context['strength'] = character.strength
+                    character.save()
+
+        # Update the characters lore based on the value associated with the 'lore' key in the data dictionary
+                if 'lore' in data.keys():
+                    a = character.lore + int(data['lore'])
+                    character.lore = a
+                    character.save()
+
+                    context['lore'] = character.lore
+                    character.save()
+
+        # Update the characters luck based on the value associated with the 'luck' key in the data dictionary
                 if 'luck' in data.keys():
                     a = character.luck + int(data['luck'])
                     character.luck = a
@@ -40,8 +87,8 @@ class Character_View(DetailView):
 
                     context['luck'] = character.luck
                     character.save()
-                    return JsonResponse(context)
-
+                
+        # Update the characters health based on the value associated with the 'luck' key in the data dictionary
                 if "health" in data.keys():
                     a = character.health + data["health"]
                     context["health"] = a
@@ -49,7 +96,7 @@ class Character_View(DetailView):
                     character.health = a
                     
                     character.save()
-                    return JsonResponse(context)
+                    
                 
                 if "max_grit" in data.keys():
                     a = character.max_grit + data["max_grit"]
@@ -61,11 +108,9 @@ class Character_View(DetailView):
 
                     context["max_grit"] = a
                     context["current_grit"] = character.current_grit
-                    return JsonResponse(context)
+                    
+                return JsonResponse(context)
 
-
-
-                return JsonResponse({"health": character.current_health})
 
             if function == 'health+':
                 if character.current_health < character.health:
@@ -150,6 +195,7 @@ class Character_View(DetailView):
 
                 context["new_xp_value"] = character.xp
                 return JsonResponse(context)
+            
             elif function == "card_next":
                 character.class_card += 1
 
@@ -174,20 +220,25 @@ class Character_View(DetailView):
                 instance.delete()
 
                 context["data"] = "deleted_token"
-                
                 return JsonResponse(context)
             
-            elif function == "equip_gear_inctance":
+            elif function == 'delete_gear':
+                pk = data["gear_instance"]
+                instance = get_object_or_404(Character_Gear, pk=pk)
+                instance.delete()
+
+                context["data"] = "deleted_gear"
+                return JsonResponse(context)
+            
+            elif function == "equip_gear_instance":
                 pk = data["gear_instance"]
                 instance = get_object_or_404(Character_Gear,pk = pk)
                 instance.equiped = True
 
                 instance.save()
 
-                context[str(instance.gear.name)] = 'is now equiped'
+                context['equiped'] = 'a'
                 return JsonResponse(context)
-
-
 
         except:
             context["error"] = "there seems to be an error"
@@ -260,5 +311,3 @@ class Create_Character_Gear(CreateView):
 
         return self.object.get_absolute_url()
     
-    
-
