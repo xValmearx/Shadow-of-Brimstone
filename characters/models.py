@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.urls import reverse
 
-from equipment.models import Token, Gear
+from equipment.models import Token, Gear, Mine_Artifact
 
 
 class Character(models.Model):
@@ -383,3 +383,26 @@ class Character_Gear(models.Model):
             return f'{self.assigned_to_character} {self.gear}'
         except:
             return "Character Gear"
+
+class Character_Mine_Artifact(models.Model):
+    assigned_to_character = models.ForeignKey(
+        Character,
+        on_delete=models.CASCADE,
+          related_name='equiped_mine_artifact')
+    
+    mine_artifact = models.ForeignKey(
+        Mine_Artifact,
+        on_delete=models.CASCADE,
+          related_name='character_mine_artifact',
+          default= 1)
+    
+    equiped = models.BooleanField(default= False)
+    
+    def get_absolute_url(self):
+        return self.assigned_to_character.get_absolute_url()
+    
+    def __str__(self):
+        try:
+            return f'{self.assigned_to_character} {self.mine_artifact}'
+        except:
+            return "Mine Artifact"

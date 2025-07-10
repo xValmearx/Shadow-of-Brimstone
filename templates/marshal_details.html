@@ -326,6 +326,7 @@
 <div class = 'container'>
   <div class = 'equipment'>
 
+    <!-- Gear -->
     <div>
       <h1 style="text-align: center;">Gear</h1>
       <button style="position: relative; left: 45%;"><a href = '{% url "add_gear" character.pk%}'>Add gear</a></button>
@@ -609,9 +610,29 @@
 
         </script>
       {% endfor %}
+      </details>
       </div>
+      
+    <div>
+      <details open>
+        <summary style="font-size: 20px;">Toggle Artifacts</summary>
+        <br>
+        <br>
+        {% for artifact in character.equiped_mine_artifact.all %}
+        <div class = 'mine_card' >
+            <h2>{{artifact.mine_artifact.name}}</h2>
+            <p>{{artifact.mine_artifact.description}}</p>
+            <h3>${{artifact.mine_artifact.value}}</h3>
+        </div>
+        <br>
+        {% endfor %}
       </details>
   </div>
+
+
+  </div> <!-- Equipment-->
+
+  
 
 
   <div class = 'resources'>
