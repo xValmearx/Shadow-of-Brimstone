@@ -328,12 +328,13 @@
 
     <!-- Gear -->
     <div>
-      <h1 style="text-align: center;">Gear</h1>
+      <h1 style="text-align: center; ">Gear</h1>
       <button style="position: relative; left: 45%;"><a href = '{% url "add_gear" character.pk%}'>Add gear</a></button>
+      <br>
+      <br>
       <details open>
         <summary style="font-size: 20px;">Toggle Gear</summary>
-      <br>
-      <br>
+    
 
       {% for gear in character.equiped_gear.all %}
         <div class = 'gear_card' 
@@ -616,10 +617,11 @@
     <div>
       <h1 style="text-align: center;">Artifacts</h1>
       <button style="position: relative; left: 45%;"><a href = '{% url "add_mine_artifact" character.pk%}'>Add Mine Artifact</a></button>
+      <br>
+      <br>
       <details open>
         <summary style="font-size: 20px;">Toggle Artifacts</summary>
-        <br>
-        <br>
+        
         {% for artifact in character.equiped_mine_artifact.all %}
         <div class = 'mine_card' 
         id = "mine_artifact_{{artifact.pk}}" 
@@ -632,7 +634,7 @@
         >
             <h2>{{artifact.mine_artifact.name}}</h2>
             <p>{{artifact.mine_artifact.description}}</p>
-            <button onclick="Delete_Gear('{{artifact.pk}}','mine_artifact_{{artifact.pk}}')">Discard</button>
+            <button onclick="Delete_Mine_Artifact('{{artifact.pk}}','mine_artifact_{{artifact.pk}}')">Discard</button>
             <h3>${{artifact.mine_artifact.value}}</h3>
         </div>
         <br>
@@ -728,21 +730,21 @@
             data_dict = await Send_Data(info);
           }
 
-          async function Delete_Gear(Data,Node){
+          async function Delete_Mine_Artifact(Data,Node){
             info = {}
             info['function'] = "delete_mine_artifact"
             info['mine_artifact_instance'] = Data
 
             data_dict = await Send_Data(info);
 
-            gear = document.getElementById(Node)
+            mine_artifact = document.getElementById(Node)
 
-            agility = gear.getAttribute('agility')
-            cunning = gear.getAttribute('cunning')
-            spirit = gear.getAttribute('spirit')
-            strength = gear.getAttribute('strength')
-            lore = gear.getAttribute('lore')
-            luck = gear.getAttribute('luck')
+            agility = mine_artifact.getAttribute('agility')
+            cunning = mine_artifact.getAttribute('cunning')
+            spirit = mine_artifact.getAttribute('spirit')
+            strength = mine_artifact.getAttribute('strength')
+            lore = mine_artifact.getAttribute('lore')
+            luck = mine_artifact.getAttribute('luck')
 
             info = {}
             info['agility'] = -agility
@@ -754,7 +756,7 @@
             Update_Character_Date(info)
 
             
-            gear.parentNode.removeChild(gear)
+            mine_artifact.parentNode.removeChild(mine_artifact)
 
             perk_instance = `mine_aritfact_perk_${Data}`
             perk = document.getElementById(perk_instance)
