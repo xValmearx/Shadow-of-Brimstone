@@ -1,0 +1,10 @@
+<!-- your_template.html -->
+    <form method="post" id="add_item">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+
+
+
+

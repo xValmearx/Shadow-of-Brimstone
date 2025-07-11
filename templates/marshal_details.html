@@ -491,6 +491,7 @@
 
           equiped = '{{gear.equiped}}'
 
+
           if(equiped == 'False'){
             equip_gear_instance('{{gear.pk}}')
 
@@ -616,7 +617,8 @@
       
     <div>
       <h1 style="text-align: center;">Artifacts</h1>
-      <button style="position: relative; left: 45%;"><a href = '{% url "add_mine_artifact" character.pk%}'>Add Mine Artifact</a></button>
+      <button><a href = '{% url "add_mine_artifact" character.pk%}'>Add Mine Artifact</a></button>
+      <button><a href = '{% url "add_targa_artifact" character.pk%}'>Add Targa Artifact</a></button>
       <br>
       <br>
       <details open>
@@ -685,8 +687,6 @@
 
           // get new dictionary of information to update character stats
           data_dict = await Send_Data(info);
-
-          console.log(data_dict)
 
           if("health" in data_dict){
             health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
@@ -898,8 +898,289 @@
           }
 
         </script>
+        {% endfor %} 
+        <!-- End Mine Artifacts -->
 
-        {% endfor %}
+        {% for artifact in character.equiped_targa_artifact.all %}
+        <div class = 'targa_card' 
+        id = "targa_artifact_{{artifact.pk}}" 
+        agility = '{{artifact.targa_artifact.agility_buff}}'
+        cunning = '{{artifact.targa_artifact.cunning_buff}}'
+        spirit = '{{artifact.targa_artifact.spirit_buff}}'
+        strength = '{{artifact.targa_artifact.strength_buff}}'
+        lore = '{{artifact.targa_artifact.lore_buff}}'
+        luck = '{{artifact.targa_artifact.luck_buff}}'
+        >
+            <h2>{{artifact.targa_artifact.name}}</h2>
+            <p>{{artifact.targa_artifact.description}}</p>
+            <button onclick="Delete_Targa_Artifact('{{artifact.pk}}','targa_artifact_{{artifact.pk}}')">Discard</button>
+            <h3>${{artifact.targa_artifact.value}}</h3>
+        </div>
+        <br>
+
+  <script>
+
+          async function Send_Data(Data) {
+
+            // get csrf token for safty
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            // get the primary key of the model
+            const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
+
+            //sending post request to character 
+            let send_data = await fetch(`/characters/${pk}/`,{
+              headers: {
+                'Content-Type':'application/json',
+                'X-CSRFToken': csrfToken,},
+              method : 'POST',
+              body : JSON.stringify(Data
+              )// body
+            })//fetch function
+
+            let send_json = await send_data.json()
+            return send_json
+          }
+
+          async function Update_Character_Date(Data){
+
+          // assign character stats
+          agility = document.getElementById('agility')
+          cunning = document.getElementById('cunning')
+          spirit = document.getElementById('spirit')
+          strength = document.getElementById('strength')
+          lore = document.getElementById('lore')
+          luck = document.getElementById('luck')
+
+          health = document.getElementById("current_wounds")
+          grit = document.getElementById("current_grit")
+
+          // temp dictionary
+          var a = {}
+          a["function"] = "update"
+
+          // merge two dictionaries together
+          var info = Object.assign({},a,Data)
+
+          // get new dictionary of information to update character stats
+          data_dict = await Send_Data(info);
+
+          if("health" in data_dict){
+            health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
+          }
+
+          if('max_grit' in data_dict){
+            grit.innerHTML = ` ${data_dict["current_grit"]} / ${data_dict["max_grit"]}`
+          }
+
+          if ('agility' in data_dict){
+            agility.innerHTML = `${data_dict['agility']}`
+          }
+
+          if ('cunning' in data_dict){
+            cunning.innerHTML = `${data_dict['cunning']}`
+          }
+
+          if ('strength' in data_dict){
+            strength.innerHTML = `${data_dict['strength']}`
+          }
+
+          if ('spirit' in data_dict){
+            spirit.innerHTML = `${data_dict['spirit']}`
+          }
+
+          if ('lore' in data_dict){
+            lore.innerHTML = `${data_dict['lore']}`
+          }
+
+          if ('luck' in data_dict){
+          luck.innerHTML = `${data_dict['luck']}`
+          }
+
+        }
+        
+          async function equip_targa_artifact_instance(Data){
+            info = {}
+            info['function'] = "equip_targa_artifact_instance"
+            info['targa_artifact_instance'] = Data
+
+            data_dict = await Send_Data(info);
+            console.log(data_dict)
+          }
+
+          async function Delete_Targa_Artifact(Data,Node){
+            info = {}
+            info['function'] = "delete_targa_artifact"
+            info['targa_artifact_instance'] = Data
+
+            data_dict = await Send_Data(info);
+
+            targa_artifact = document.getElementById(Node)
+
+            agility = targa_artifact.getAttribute('agility')
+            cunning = targa_artifact.getAttribute('cunning')
+            spirit = targa_artifact.getAttribute('spirit')
+            strength = targa_artifact.getAttribute('strength')
+            lore = targa_artifact.getAttribute('lore')
+            luck = targa_artifact.getAttribute('luck')
+
+            info = {}
+            info['agility'] = -agility
+            info['cunning'] = -cunning
+            info['spirit'] = -spirit
+            info['strength'] = -strength
+            info['lore'] = -lore
+            info['luck'] = -luck
+            Update_Character_Date(info)
+
+            
+            targa_artifact.parentNode.removeChild(targa_artifact)
+
+            perk_instance = `targa_aritfact_perk_${Data}`
+            perk = document.getElementById(perk_instance)
+            perk.parentNode.removeChild(perk)
+
+          }
+        
+          name = '{{artifact.targa_artifact.name}}'
+          description = '{{artifact.targa_artifact.description}}'
+          buff_type = '{{artifact.targa_artifact.buff_type}}'
+
+
+          agility = '{{artifact.targa_artifact.agility_buff}}'
+          cunning = '{{artifact.targa_artifact.cunning_buff}}'
+          spirit = '{{artifact.targa_artifact.spirit_buff}}'
+          strength = '{{artifact.targa_artifact.strength_buff}}'
+          lore = '{{artifact.targa_artifact.lore_buff}}'
+          luck = '{{artifact.targa_artifact.luck_buff}}'
+
+          equiped = '{{artifact.equiped}}'
+
+          if(equiped == 'False'){
+            equip_targa_artifact_instance('{{artifact.pk}}')
+
+            info = {}
+            info['agility'] = agility
+            info['cunning'] = cunning
+            info['spirit'] = spirit
+            info['strength'] = strength
+            info['lore'] = lore
+            info['luck'] = luck
+
+            Update_Character_Date(info)
+          }
+
+          if(buff_type == 'passive'){
+
+            //get passive and change its css
+            let passives = document.getElementById('passive')
+            passives.style.display = 'block';
+            passives.style.width = "100%";
+            passives.style.test_align = 'center';
+            passives.style.justifyItems = 'center';
+
+            // create new div that will be added to passive
+            new_div = document.createElement('div')
+            new_h3 = document.createElement('h3')
+            new_text = document.createElement('p')
+            new_br = document.createElement('br')
+
+            new_h3.textContent = name
+            new_text.textContent = description
+            new_div.className = "ability_card"
+
+            new_div.appendChild(new_h3)
+            new_div.appendChild(new_text)
+            new_div.setAttribute('id','targa_aritfact_perk_{{artifact.pk}}')
+
+            passives.appendChild(new_div)
+            passives.appendChild(new_br)
+          }
+
+          if(buff_type == "turn"){
+            //get passive and change its css
+            let div_location = document.getElementById('per_turn')
+            div_location.style.display = 'block';
+            div_location.style.width = "100%";
+            div_location.style.test_align = 'center';
+            div_location.style.justifyItems = 'center';
+
+            // create new div that will be added to passive
+            new_div = document.createElement('div')
+            new_h3 = document.createElement('h3')
+            new_text = document.createElement('p')
+            new_br = document.createElement('br')
+
+            new_h3.textContent = name
+            new_text.textContent = description
+            new_div.className = "ability_card"
+
+            new_div.appendChild(new_h3)
+            new_div.appendChild(new_text)
+            new_div.setAttribute('id','targa_aritfact_perk_{{artifact.pk}}')
+
+            div_location.appendChild(new_div)
+            div_location.appendChild(new_br)
+          }
+        
+          if(buff_type == "fight"){
+            //get passive and change its css
+            let div_location = document.getElementById('per_fight')
+            div_location.style.display = 'block';
+            div_location.style.width = "100%";
+            div_location.style.test_align = 'center';
+            div_location.style.justifyItems = 'center';
+
+            // create new div that will be added to passive
+            new_div = document.createElement('div')
+            new_h3 = document.createElement('h3')
+            new_text = document.createElement('p')
+            new_br = document.createElement('br')
+
+            new_h3.textContent = name
+            new_text.textContent = description
+            new_div.className = "ability_card"
+
+            new_div.appendChild(new_h3)
+            new_div.appendChild(new_text)
+            new_div.setAttribute('id','targa_aritfact_perk_{{artifact.pk}}')
+
+            div_location.appendChild(new_div)
+            div_location.appendChild(new_br)
+          }
+        
+          if(buff_type == "adventure"){
+            //get passive and change its css
+            let div_location = document.getElementById('per_adventure')
+            div_location.style.display = 'block';
+            div_location.style.width = "100%";
+            div_location.style.test_align = 'center';
+            div_location.style.justifyItems = 'center';
+
+            // create new div that will be added to passive
+            new_div = document.createElement('div')
+            new_h3 = document.createElement('h3')
+            new_text = document.createElement('p')
+            new_br = document.createElement('br')
+
+            new_h3.textContent = name
+            new_text.textContent = description
+            new_div.className = "ability_card"
+
+            new_div.appendChild(new_h3)
+            new_div.appendChild(new_text)
+            new_div.setAttribute('id','targa_aritfact_perk_{{artifact.pk}}')
+
+            div_location.appendChild(new_div)
+            div_location.appendChild(new_br)
+          }
+
+        </script>
+
+        {% endfor %} 
+        <!-- End Targa Artifacts -->
+
+
       </details>
   </div>
 

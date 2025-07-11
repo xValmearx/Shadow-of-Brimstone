@@ -177,6 +177,39 @@ body{
   border-radius: 5px;
 }
 
+.targa_card{
+  padding: 6px;
+  width: 80%;
+  border: solid black;
+  border-radius: 5px;
+  border-width: 4px;
+  background-color:  rgb(134, 108, 40);
+
+  position: relative;
+  left: 7%;
+
+  font-size: 20px;
+  text-align: center;
+}
+
+.targa_card h2{
+  width: 80%;
+  background-color: #293457;
+  border-radius: 5px;
+
+  position: relative;
+  left: 10%;
+}
+
+.targa_card h3{
+  position: relative; 
+  padding: 3px;
+  left: 90%; 
+  background-color: gold; 
+  width: fit-content;
+  border-radius: 5px;
+}
+
 .equipment{
   background-color: #bb9430;
   width: 60vw;

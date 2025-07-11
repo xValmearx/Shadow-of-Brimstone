@@ -2,11 +2,11 @@ from django.views.generic import ListView,DetailView,CreateView,TemplateView
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .forms import Add_Side_Bag_Token, Add_Character_Gear, Add_Character_Mine_Artifact
+from .forms import Add_Side_Bag_Token, Add_Character_Gear, Add_Character_Mine_Artifact, Add_Character_Targa_Artifact
 
 import json
 
-from .models import Character, Side_Bag, Character_Gear, Character_Mine_Artifact
+from .models import Character, Side_Bag, Character_Gear, Character_Mine_Artifact, Character_Targa_Artifact
 
 class All_Characters(ListView):
     model = Character
@@ -256,6 +256,24 @@ class Character_View(DetailView):
 
                 context["data"] = "deleted_gear"
                 return JsonResponse(context)
+            
+            elif function == 'equip_targa_artifact_instance':
+                pk = data['targa_artifact_instance']
+                instance = get_object_or_404(Character_Targa_Artifact,pk = pk)
+                instance.equiped = True
+
+                instance.save()
+
+                context['equiped'] = 'a'
+                return JsonResponse(context)
+        
+            elif function == "delete_targa_artifact":
+                pk = data['targa_artifact_instance']
+                instance = get_object_or_404(Character_Targa_Artifact, pk=pk)
+                instance.delete()
+
+                context["data"] = "deleted_gear"
+                return JsonResponse(context)
 
         except:
             context["error"] = "there seems to be an error"
@@ -331,6 +349,35 @@ class Create_Character_Mine_Artifact(CreateView):
     model = Character_Mine_Artifact
     form_class = Add_Character_Mine_Artifact
     template_name = "new_character_mine_artifact.html"
+
+    def get_initial(self):
+        initial = super().get_initial()
+        # Retrieve the URL parameter (e.g., pk)
+        pk = self.kwargs.get('pk')
+        if pk:
+            # Fetch data from the database or set initial values
+            try:
+                obj = Character.objects.get(pk=pk)
+                initial['assigned_to_character'] = obj  # Pre-fill form field
+            except Character.DoesNotExist:
+                pass
+        return initial
+
+    def form_valid(self, form):
+        # Process the form data
+        return super().form_valid(form)
+
+
+    def get_success_url(self):
+        # Dynamically generate the success URL
+
+        return self.object.get_absolute_url()
+    
+class Create_Character_Targa_Artifact(CreateView):
+
+    model = Character_Targa_Artifact
+    form_class = Add_Character_Targa_Artifact
+    template_name = "new_character_targa_artifact.html"
 
     def get_initial(self):
         initial = super().get_initial()
