@@ -39,8 +39,6 @@
         </table>
       </div> 
 
-      
-
       <!-- Sanity area -->
       <div>
         <h3>Sanity</h3>
@@ -177,8 +175,6 @@
   </table>
   </div>
   </div>
-  
-
 
   <!-- character abilites -->
   <div class = 'abilites'>
@@ -337,153 +333,10 @@
       <details open>
         <summary style="font-size: 20px;">Toggle Gear</summary>
     
-
+      <div id = 'gear_container'>
       {% for gear in character.equiped_gear.all %}
         <div class = 'gear_card' 
-        id = "gear_{{gear.pk}}" 
-        agility = '{{gear.gear.agility_buff}}'
-        cunning = '{{gear.gear.cunning_buff}}'
-        spirit = '{{gear.gear.spirit_buff}}'
-        strength = '{{gear.gear.strength_buff}}'
-        lore = '{{gear.gear.lore_buff}}'
-        luck = '{{gear.gear.luck_buff}}'
-        >
-            <h2>{{gear.gear.name}}</h2>
-            <p>{{gear.gear.description}}</p>
-            <button onclick="Delete_Gear('{{gear.pk}}','gear_{{gear.pk}}')">Discard</button>
-            <h3>${{gear.gear.value}}</h3>
-        </div>
-        <br>
-        <!-- Gear Script -->
-        <script>
-
-          async function Send_Data(Data) {
-
-            // get csrf token for safty
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // get the primary key of the model
-            const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
-
-            //sending post request to character 
-            let send_data = await fetch(`/characters/${pk}/`,{
-              headers: {
-                'Content-Type':'application/json',
-                'X-CSRFToken': csrfToken,},
-              method : 'POST',
-              body : JSON.stringify(Data
-              )// body
-            })//fetch function
-
-            let send_json = await send_data.json()
-            return send_json
-          }
-
-          async function Update_Character_Date(Data){
-
-          // assign character stats
-          agility = document.getElementById('agility')
-          cunning = document.getElementById('cunning')
-          spirit = document.getElementById('spirit')
-          strength = document.getElementById('strength')
-          lore = document.getElementById('lore')
-          luck = document.getElementById('luck')
-
-          health = document.getElementById("current_wounds")
-          grit = document.getElementById("current_grit")
-
-          // temp dictionary
-          var a = {}
-          a["function"] = "update"
-
-          // merge two dictionaries together
-          var info = Object.assign({},a,Data)
-
-          // get new dictionary of information to update character stats
-          data_dict = await Send_Data(info);
-
-          if("health" in data_dict){
-            health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
-          }
-
-          if('max_grit' in data_dict){
-            grit.innerHTML = ` ${data_dict["current_grit"]} / ${data_dict["max_grit"]}`
-          }
-
-          if ('agility' in data_dict){
-            agility.innerHTML = `${data_dict['agility']}`
-          }
-
-          if ('cunning' in data_dict){
-            cunning.innerHTML = `${data_dict['cunning']}`
-          }
-
-          if ('strength' in data_dict){
-            strength.innerHTML = `${data_dict['strength']}`
-          }
-
-          if ('spirit' in data_dict){
-            spirit.innerHTML = `${data_dict['spirit']}`
-          }
-
-          if ('lore' in data_dict){
-            lore.innerHTML = `${data_dict['lore']}`
-          }
-
-          if ('luck' in data_dict){
-          luck.innerHTML = `${data_dict['luck']}`
-          }
-
-        }
-        
-          async function equip_gear_instance(Data){
-            info = {}
-            info['function'] = "equip_gear_instance"
-            info['gear_instance'] = Data
-
-            data_dict = await Send_Data(info);
-          }
-
-          async function Delete_Gear(Data,Node){
-            info = {}
-            info['function'] = "delete_gear"
-            info['gear_instance'] = Data
-
-            data_dict = await Send_Data(info);
-
-            gear = document.getElementById(Node)
-
-            agility = gear.getAttribute('agility')
-            cunning = gear.getAttribute('cunning')
-            spirit = gear.getAttribute('spirit')
-            strength = gear.getAttribute('strength')
-            lore = gear.getAttribute('lore')
-            luck = gear.getAttribute('luck')
-
-            info = {}
-            info['agility'] = -agility
-            info['cunning'] = -cunning
-            info['spirit'] = -spirit
-            info['strength'] = -strength
-            info['lore'] = -lore
-            info['luck'] = -luck
-            Update_Character_Date(info)
-
-            
-            gear.parentNode.removeChild(gear)
-
-            perk_instance = `gear_perk_${Data}`
-            perk = document.getElementById(perk_instance)
-            perk.parentNode.removeChild(perk)
-
-          }
-        
-
-          name = '{{gear.gear.name}}'
-          description = '{{gear.gear.description}}'
-          buff_type = '{{gear.gear.buff_type}}'
-
-
+          id = "gear_{{gear.pk}}" 
           agility = '{{gear.gear.agility_buff}}'
           cunning = '{{gear.gear.cunning_buff}}'
           spirit = '{{gear.gear.spirit_buff}}'
@@ -492,22 +345,22 @@
           luck = '{{gear.gear.luck_buff}}'
 
           equiped = '{{gear.equiped}}'
+          >
+              <h2>{{gear.gear.name}}</h2>
+              <p>{{gear.gear.description}}</p>
+              <button onclick="Delete_Item('{{gear.pk}}','gear_{{gear.pk}}','Gear')">Discard</button>
+              <h3>${{gear.gear.value}}</h3>
+          </div>
+        <br>
+        <!-- Gear Script -->
+        <script>
+          buff_type = '{{gear.gear.buff_type}}'
+          description = '{{gear.gear.description}}'
 
-
-          if(equiped == 'False'){
-            equip_gear_instance('{{gear.pk}}')
-
-            info = {}
-            info['agility'] = agility
-            info['cunning'] = cunning
-            info['spirit'] = spirit
-            info['strength'] = strength
-            info['lore'] = lore
-            info['luck'] = luck
-            Update_Character_Date(info)
-          }
+          console.log(buff_type)
 
           if(buff_type == 'passive'){
+
 
             //get passive and change its css
             let passives = document.getElementById('passive')
@@ -614,6 +467,7 @@
 
         </script>
       {% endfor %}
+      </div>
       </details>
       </div>
       
@@ -638,161 +492,14 @@
         >
             <h2>{{artifact.mine_artifact.name}}</h2>
             <p>{{artifact.mine_artifact.description}}</p>
-            <button onclick="Delete_Mine_Artifact('{{artifact.pk}}','mine_artifact_{{artifact.pk}}')">Discard</button>
+             <button onclick="Delete_Item('{{artifact.pk}}','mine_artifact_{{artifact.pk}}','Mine')">Discard</button>
             <h3>${{artifact.mine_artifact.value}}</h3>
         </div>
         <br>
 
         <script>
-
-          async function Send_Data(Data) {
-
-            // get csrf token for safty
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // get the primary key of the model
-            const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
-
-            //sending post request to character 
-            let send_data = await fetch(`/characters/${pk}/`,{
-              headers: {
-                'Content-Type':'application/json',
-                'X-CSRFToken': csrfToken,},
-              method : 'POST',
-              body : JSON.stringify(Data
-              )// body
-            })//fetch function
-
-            let send_json = await send_data.json()
-            return send_json
-          }
-
-          async function Update_Character_Date(Data){
-
-          // assign character stats
-          agility = document.getElementById('agility')
-          cunning = document.getElementById('cunning')
-          spirit = document.getElementById('spirit')
-          strength = document.getElementById('strength')
-          lore = document.getElementById('lore')
-          luck = document.getElementById('luck')
-
-          health = document.getElementById("current_wounds")
-          grit = document.getElementById("current_grit")
-
-          // temp dictionary
-          var a = {}
-          a["function"] = "update"
-
-          // merge two dictionaries together
-          var info = Object.assign({},a,Data)
-
-          // get new dictionary of information to update character stats
-          data_dict = await Send_Data(info);
-
-          if("health" in data_dict){
-            health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
-          }
-
-          if('max_grit' in data_dict){
-            grit.innerHTML = ` ${data_dict["current_grit"]} / ${data_dict["max_grit"]}`
-          }
-
-          if ('agility' in data_dict){
-            agility.innerHTML = `${data_dict['agility']}`
-          }
-
-          if ('cunning' in data_dict){
-            cunning.innerHTML = `${data_dict['cunning']}`
-          }
-
-          if ('strength' in data_dict){
-            strength.innerHTML = `${data_dict['strength']}`
-          }
-
-          if ('spirit' in data_dict){
-            spirit.innerHTML = `${data_dict['spirit']}`
-          }
-
-          if ('lore' in data_dict){
-            lore.innerHTML = `${data_dict['lore']}`
-          }
-
-          if ('luck' in data_dict){
-          luck.innerHTML = `${data_dict['luck']}`
-          }
-
-        }
-        
-          async function equip_mine_artifact_instance(Data){
-            info = {}
-            info['function'] = "equip_mine_artifact_instance"
-            info['mine_artifact_instance'] = Data
-
-            data_dict = await Send_Data(info);
-          }
-
-          async function Delete_Mine_Artifact(Data,Node){
-            info = {}
-            info['function'] = "delete_mine_artifact"
-            info['mine_artifact_instance'] = Data
-
-            data_dict = await Send_Data(info);
-
-            mine_artifact = document.getElementById(Node)
-
-            agility = mine_artifact.getAttribute('agility')
-            cunning = mine_artifact.getAttribute('cunning')
-            spirit = mine_artifact.getAttribute('spirit')
-            strength = mine_artifact.getAttribute('strength')
-            lore = mine_artifact.getAttribute('lore')
-            luck = mine_artifact.getAttribute('luck')
-
-            info = {}
-            info['agility'] = -agility
-            info['cunning'] = -cunning
-            info['spirit'] = -spirit
-            info['strength'] = -strength
-            info['lore'] = -lore
-            info['luck'] = -luck
-            Update_Character_Date(info)
-
-            
-            mine_artifact.parentNode.removeChild(mine_artifact)
-
-            perk_instance = `mine_aritfact_perk_${Data}`
-            perk = document.getElementById(perk_instance)
-            perk.parentNode.removeChild(perk)
-
-          }
-        
-          name = '{{artifact.mine_artifact.name}}'
-          description = '{{artifact.mine_artifact.description}}'
           buff_type = '{{artifact.mine_artifact.buff_type}}'
-
-
-          agility = '{{artifact.mine_artifact.agility_buff}}'
-          cunning = '{{artifact.mine_artifact.cunning_buff}}'
-          spirit = '{{artifact.mine_artifact.spirit_buff}}'
-          strength = '{{artifact.mine_artifact.strength_buff}}'
-          lore = '{{artifact.mine_artifact.lore_buff}}'
-          luck = '{{artifact.mine_artifact.luck_buff}}'
-
-          equiped = '{{artifact.equiped}}'
-
-          if(equiped == 'False'){
-            equip_mine_artifact_instance('{{artifact.pk}}')
-
-            info = {}
-            info['agility'] = agility
-            info['cunning'] = cunning
-            info['spirit'] = spirit
-            info['strength'] = strength
-            info['lore'] = lore
-            info['luck'] = luck
-
-            Update_Character_Date(info)
-          }
+          description = '{{artifact.mine_artifact.description}}'
 
           if(buff_type == 'passive'){
 
@@ -915,162 +622,15 @@
         >
             <h2>{{artifact.targa_artifact.name}}</h2>
             <p>{{artifact.targa_artifact.description}}</p>
-            <button onclick="Delete_Targa_Artifact('{{artifact.pk}}','targa_artifact_{{artifact.pk}}')">Discard</button>
+            <button onclick="Delete_Item('{{artifact.pk}}','targa_artifact_{{artifact.pk}}','Targa')">Discard</button>
             <h3>${{artifact.targa_artifact.value}}</h3>
         </div>
         <br>
 
   <script>
 
-          async function Send_Data(Data) {
-
-            // get csrf token for safty
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            // get the primary key of the model
-            const pk = document.querySelector('meta[name="csrf-token"]').getAttribute('data-id');
-
-            //sending post request to character 
-            let send_data = await fetch(`/characters/${pk}/`,{
-              headers: {
-                'Content-Type':'application/json',
-                'X-CSRFToken': csrfToken,},
-              method : 'POST',
-              body : JSON.stringify(Data
-              )// body
-            })//fetch function
-
-            let send_json = await send_data.json()
-            return send_json
-          }
-
-          async function Update_Character_Date(Data){
-
-          // assign character stats
-          agility = document.getElementById('agility')
-          cunning = document.getElementById('cunning')
-          spirit = document.getElementById('spirit')
-          strength = document.getElementById('strength')
-          lore = document.getElementById('lore')
-          luck = document.getElementById('luck')
-
-          health = document.getElementById("current_wounds")
-          grit = document.getElementById("current_grit")
-
-          // temp dictionary
-          var a = {}
-          a["function"] = "update"
-
-          // merge two dictionaries together
-          var info = Object.assign({},a,Data)
-
-          // get new dictionary of information to update character stats
-          data_dict = await Send_Data(info);
-
-          if("health" in data_dict){
-            health.innerHTML = `{{character.current_health}} / ${data_dict["health"]}`
-          }
-
-          if('max_grit' in data_dict){
-            grit.innerHTML = ` ${data_dict["current_grit"]} / ${data_dict["max_grit"]}`
-          }
-
-          if ('agility' in data_dict){
-            agility.innerHTML = `${data_dict['agility']}`
-          }
-
-          if ('cunning' in data_dict){
-            cunning.innerHTML = `${data_dict['cunning']}`
-          }
-
-          if ('strength' in data_dict){
-            strength.innerHTML = `${data_dict['strength']}`
-          }
-
-          if ('spirit' in data_dict){
-            spirit.innerHTML = `${data_dict['spirit']}`
-          }
-
-          if ('lore' in data_dict){
-            lore.innerHTML = `${data_dict['lore']}`
-          }
-
-          if ('luck' in data_dict){
-          luck.innerHTML = `${data_dict['luck']}`
-          }
-
-        }
-        
-          async function equip_targa_artifact_instance(Data){
-            info = {}
-            info['function'] = "equip_targa_artifact_instance"
-            info['targa_artifact_instance'] = Data
-
-            data_dict = await Send_Data(info);
-            console.log(data_dict)
-          }
-
-          async function Delete_Targa_Artifact(Data,Node){
-            info = {}
-            info['function'] = "delete_targa_artifact"
-            info['targa_artifact_instance'] = Data
-
-            data_dict = await Send_Data(info);
-
-            targa_artifact = document.getElementById(Node)
-
-            agility = targa_artifact.getAttribute('agility')
-            cunning = targa_artifact.getAttribute('cunning')
-            spirit = targa_artifact.getAttribute('spirit')
-            strength = targa_artifact.getAttribute('strength')
-            lore = targa_artifact.getAttribute('lore')
-            luck = targa_artifact.getAttribute('luck')
-
-            info = {}
-            info['agility'] = -agility
-            info['cunning'] = -cunning
-            info['spirit'] = -spirit
-            info['strength'] = -strength
-            info['lore'] = -lore
-            info['luck'] = -luck
-            Update_Character_Date(info)
-
-            
-            targa_artifact.parentNode.removeChild(targa_artifact)
-
-            perk_instance = `targa_aritfact_perk_${Data}`
-            perk = document.getElementById(perk_instance)
-            perk.parentNode.removeChild(perk)
-
-          }
-        
-          name = '{{artifact.targa_artifact.name}}'
-          description = '{{artifact.targa_artifact.description}}'
           buff_type = '{{artifact.targa_artifact.buff_type}}'
-
-
-          agility = '{{artifact.targa_artifact.agility_buff}}'
-          cunning = '{{artifact.targa_artifact.cunning_buff}}'
-          spirit = '{{artifact.targa_artifact.spirit_buff}}'
-          strength = '{{artifact.targa_artifact.strength_buff}}'
-          lore = '{{artifact.targa_artifact.lore_buff}}'
-          luck = '{{artifact.targa_artifact.luck_buff}}'
-
-          equiped = '{{artifact.equiped}}'
-
-          if(equiped == 'False'){
-            equip_targa_artifact_instance('{{artifact.pk}}')
-
-            info = {}
-            info['agility'] = agility
-            info['cunning'] = cunning
-            info['spirit'] = spirit
-            info['strength'] = strength
-            info['lore'] = lore
-            info['luck'] = luck
-
-            Update_Character_Date(info)
-          }
+          description = '{{artifact.targa_artifact.description}}'
 
           if(buff_type == 'passive'){
 
@@ -1178,19 +738,12 @@
           }
 
         </script>
-
         {% endfor %} 
         <!-- End Targa Artifacts -->
-
-
       </details>
   </div>
 
-
   </div> <!-- Equipment-->
-
-  
-
 
   <div class = 'resources'>
     <div style="
@@ -1277,6 +830,14 @@
     var card_3_equiped = false
   }
 
+const childDivs = document.querySelectorAll('#gear_container .gear_card');
+
+childDivs.forEach((item) => {
+  id = item.getAttribute('id')
+
+  console.log('www',id)
+});
+
 
 // functions--------------------------------------------------------------------------------------------------
 
@@ -1298,6 +859,8 @@
     return send_json
   }
 
+
+// button function data
   async function Health_Data(Data) {
     
     let info = {}
@@ -1483,6 +1046,8 @@
 
 }
 
+// button function data
+
   async function Update_Character_Date(Data){
 
     // assign character stats
@@ -1556,6 +1121,57 @@
 
 
 
+  }
+
+  async function Delete_Item(Data,Node,Type){
+            //Data = item primary key
+            //Node =  the document element that will be deleted
+            // type determins which 
+            info = {}
+            info['function'] = "delete_item"
+            info['instance'] = Data
+            info['Type'] = Type
+            data_dict = await Send_Data(info);
+
+            console.log(data_dict)
+
+            item = document.getElementById(Node)
+
+            // agility = gear.getAttribute('agility')
+            // cunning = gear.getAttribute('cunning')
+            // spirit = gear.getAttribute('spirit')
+            // strength = gear.getAttribute('strength')
+            // lore = gear.getAttribute('lore')
+            // luck = gear.getAttribute('luck')
+
+            // info = {}
+            // info['agility'] = -agility
+            // info['cunning'] = -cunning
+            // info['spirit'] = -spirit
+            // info['strength'] = -strength
+            // info['lore'] = -lore
+            // info['luck'] = -luck
+            // Update_Character_Date(info)
+            
+            item.parentNode.removeChild(item)
+
+            if(Type == 'Gear'){
+              perk_instance = `gear_perk_${Data}`
+              perk = document.getElementById(perk_instance)
+              perk.parentNode.removeChild(perk)
+            }
+            if(Type == 'Mine'){
+              perk_instance = `mine_aritfact_perk_${Data}`
+              perk = document.getElementById(perk_instance)
+              console.log(perk_instance)
+              console.log(perk)
+              perk.parentNode.removeChild(perk)
+            }
+            if(Type == 'Targa'){
+              perk_instance = `targa_aritfact_perk_${Data}`
+              perk = document.getElementById(perk_instance)
+              perk.parentNode.removeChild(perk)
+            }
   }
 
 // health,sanity,grit buttons------------------------------------------------------------------------------------------

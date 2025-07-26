@@ -1,4 +1,4 @@
-from django.views.generic import ListView,DetailView,CreateView,TemplateView
+from django.views.generic import ListView,DetailView,CreateView
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -34,7 +34,7 @@ class Character_View(DetailView):
             # if the function is updating the character stats
             if function == "update":
 
-        # Update the characters agility based on the value associated with the 'agility' key in the data dictionary
+                # Update the characters agility based on the value associated with the 'agility' key in the data dictionary
                 if 'agility' in data.keys():
                     a = character.agility + int(data['agility'])
                     character.agility = a
@@ -43,7 +43,7 @@ class Character_View(DetailView):
                     context['luck'] = character.agility
                     character.save()
 
-        # Update the characters cunning based on the value associated with the 'cunning' key in the data dictionary
+                # Update the characters cunning based on the value associated with the 'cunning' key in the data dictionary
                 if 'cunning' in data.keys():
                     a = character.cunning + int(data['cunning'])
                     character.cunning = a
@@ -52,7 +52,7 @@ class Character_View(DetailView):
                     context['cunning'] = character.cunning
                     character.save()
 
-        # Update the characters spirit based on the value associated with the 'spirit' key in the data dictionary
+                # Update the characters spirit based on the value associated with the 'spirit' key in the data dictionary
                 if 'spirit' in data.keys():
                     a = character.spirit + int(data['spirit'])
                     character.spirit = a
@@ -61,7 +61,7 @@ class Character_View(DetailView):
                     context['spirit'] = character.spirit
                     character.save()
 
-        # Update the characters strength based on the value associated with the 'strength' key in the data dictionary
+                # Update the characters strength based on the value associated with the 'strength' key in the data dictionary
                 if 'strength' in data.keys():
                     a = character.strength + int(data['strength'])
                     character.strength = a
@@ -70,7 +70,7 @@ class Character_View(DetailView):
                     context['strength'] = character.strength
                     character.save()
 
-        # Update the characters lore based on the value associated with the 'lore' key in the data dictionary
+                # Update the characters lore based on the value associated with the 'lore' key in the data dictionary
                 if 'lore' in data.keys():
                     a = character.lore + int(data['lore'])
                     character.lore = a
@@ -79,7 +79,7 @@ class Character_View(DetailView):
                     context['lore'] = character.lore
                     character.save()
 
-        # Update the characters luck based on the value associated with the 'luck' key in the data dictionary
+                # Update the characters luck based on the value associated with the 'luck' key in the data dictionary
                 if 'luck' in data.keys():
                     a = character.luck + int(data['luck'])
                     character.luck = a
@@ -88,7 +88,7 @@ class Character_View(DetailView):
                     context['luck'] = character.luck
                     character.save()
                 
-        # Update the characters health based on the value associated with the 'luck' key in the data dictionary
+                # Update the characters health based on the value associated with the 'luck' key in the data dictionary
                 if "health" in data.keys():
                     a = character.health + data["health"]
                     context["health"] = a
@@ -221,62 +221,25 @@ class Character_View(DetailView):
                 context["data"] = "deleted_token"
                 return JsonResponse(context)
             
-            elif function == 'delete_gear':
-                pk = data["gear_instance"]
-                instance = get_object_or_404(Character_Gear, pk=pk)
-                instance.delete()
+            elif function == 'delete_item':
+                pk = data["instance"]
+                Type = data['Type']
 
-                context["data"] = "deleted_gear"
-                return JsonResponse(context)
-            
-            elif function == "equip_gear_instance":
-                pk = data["gear_instance"]
-                instance = get_object_or_404(Character_Gear,pk = pk)
-                instance.equiped = True
-
-                instance.save()
-
-                context['equiped'] = 'a'
-                return JsonResponse(context)
-
-            elif function == "equip_mine_artifact_instance":
-                pk = data['mine_artifact_instance']
-                instance = get_object_or_404(Character_Mine_Artifact,pk = pk)
-                instance.equiped = True
-
-                instance.save()
-
-                context['equiped'] = 'a'
-                return JsonResponse(context)
-
-            elif function == "delete_mine_artifact":
-                pk = data['mine_artifact_instance']
-                instance = get_object_or_404(Character_Mine_Artifact, pk=pk)
-                instance.delete()
-
-                context["data"] = "deleted_gear"
-                return JsonResponse(context)
-            
-            elif function == 'equip_targa_artifact_instance':
-                pk = data['targa_artifact_instance']
-                instance = get_object_or_404(Character_Targa_Artifact,pk = pk)
-                instance.equiped = True
-
-                instance.save()
-
-                context['equiped'] = 'a'
-                return JsonResponse(context)
-        
-            elif function == "delete_targa_artifact":
-                pk = data['targa_artifact_instance']
-                instance = get_object_or_404(Character_Targa_Artifact, pk=pk)
-                instance.delete()
+                if Type == "Gear":
+                    instance = get_object_or_404(Character_Gear, pk=pk)
+                    instance.delete()
+                elif Type == "Mine":
+                    instance = get_object_or_404(Character_Mine_Artifact, pk=pk)
+                    instance.delete()
+                elif Type == "Targa":
+                    instance = get_object_or_404(Character_Targa_Artifact, pk=pk)
+                    instance.delete()
 
                 context["data"] = "deleted_gear"
                 return JsonResponse(context)
 
-        except:
-            context["error"] = "there seems to be an error"
+        except Exception as e:
+            context["error"] = str(e)
             return JsonResponse(context)
         
     def get_object(self, queryset=None):
